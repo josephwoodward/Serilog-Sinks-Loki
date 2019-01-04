@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serilog.Sinks.Loki", "src\Serilog.Sinks.Loki\Serilog.Sinks.Loki.csproj", "{CA843AAB-AEC9-48CA-9505-3872B2FD1B62}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serilog.Sinks.Loki.Tests", "test\Serilog.Sinks.Loki.Tests\Serilog.Sinks.Loki.Tests.csproj", "{D1296C65-14C2-4F0B-8002-94DE80E27BA9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serilog.Sinks.Loki.Example", "src\Serilog.Sinks.Loki.Example\Serilog.Sinks.Loki.Example.csproj", "{27231F46-85E6-4046-9C1E-4D8BB77A9E0D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{4AD58876-F35B-4528-AD14-ACF70CE02A11}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CA843AAB-AEC9-48CA-9505-3872B2FD1B62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA843AAB-AEC9-48CA-9505-3872B2FD1B62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA843AAB-AEC9-48CA-9505-3872B2FD1B62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA843AAB-AEC9-48CA-9505-3872B2FD1B62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1296C65-14C2-4F0B-8002-94DE80E27BA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1296C65-14C2-4F0B-8002-94DE80E27BA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1296C65-14C2-4F0B-8002-94DE80E27BA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1296C65-14C2-4F0B-8002-94DE80E27BA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27231F46-85E6-4046-9C1E-4D8BB77A9E0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27231F46-85E6-4046-9C1E-4D8BB77A9E0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27231F46-85E6-4046-9C1E-4D8BB77A9E0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27231F46-85E6-4046-9C1E-4D8BB77A9E0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4AD58876-F35B-4528-AD14-ACF70CE02A11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4AD58876-F35B-4528-AD14-ACF70CE02A11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4AD58876-F35B-4528-AD14-ACF70CE02A11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4AD58876-F35B-4528-AD14-ACF70CE02A11}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

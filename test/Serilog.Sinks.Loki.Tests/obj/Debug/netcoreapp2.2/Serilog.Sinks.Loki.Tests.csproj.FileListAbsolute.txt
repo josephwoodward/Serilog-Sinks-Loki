@@ -1,0 +1,17 @@
+/Users/josephwoodward/Development/Serilog.Sinks.Loki/test/Serilog.Sinks.Loki.Tests/obj/Debug/netcoreapp2.2/Serilog.Sinks.Loki.Tests.csprojAssemblyReference.cache
+/Users/josephwoodward/Development/Serilog.Sinks.Loki/test/Serilog.Sinks.Loki.Tests/obj/Debug/netcoreapp2.2/Serilog.Sinks.Loki.Tests.csproj.CoreCompileInputs.cache
+/Users/josephwoodward/Development/Serilog.Sinks.Loki/test/Serilog.Sinks.Loki.Tests/obj/Debug/netcoreapp2.2/Serilog.Sinks.Loki.Tests.AssemblyInfoInputs.cache
+/Users/josephwoodward/Development/Serilog.Sinks.Loki/test/Serilog.Sinks.Loki.Tests/obj/Debug/netcoreapp2.2/Serilog.Sinks.Loki.Tests.AssemblyInfo.cs
+/Users/josephwoodward/Development/Serilog.Sinks.Loki/test/Serilog.Sinks.Loki.Tests/bin/Debug/netcoreapp2.2/xunit.runner.visualstudio.dotnetcore.testadapter.dll
+/Users/josephwoodward/Development/Serilog.Sinks.Loki/test/Serilog.Sinks.Loki.Tests/bin/Debug/netcoreapp2.2/xunit.runner.reporters.netcoreapp10.dll
+/Users/josephwoodward/Development/Serilog.Sinks.Loki/test/Serilog.Sinks.Loki.Tests/bin/Debug/netcoreapp2.2/xunit.runner.utility.netcoreapp10.dll
+/Users/josephwoodward/Development/Serilog.Sinks.Loki/test/Serilog.Sinks.Loki.Tests/bin/Debug/netcoreapp2.2/Serilog.Sinks.Loki.Tests.deps.json
+/Users/josephwoodward/Development/Serilog.Sinks.Loki/test/Serilog.Sinks.Loki.Tests/bin/Debug/netcoreapp2.2/Serilog.Sinks.Loki.Tests.runtimeconfig.json
+/Users/josephwoodward/Development/Serilog.Sinks.Loki/test/Serilog.Sinks.Loki.Tests/bin/Debug/netcoreapp2.2/Serilog.Sinks.Loki.Tests.runtimeconfig.dev.json
+/Users/josephwoodward/Development/Serilog.Sinks.Loki/test/Serilog.Sinks.Loki.Tests/bin/Debug/netcoreapp2.2/Serilog.Sinks.Loki.Tests.dll
+/Users/josephwoodward/Development/Serilog.Sinks.Loki/test/Serilog.Sinks.Loki.Tests/bin/Debug/netcoreapp2.2/Serilog.Sinks.Loki.Tests.pdb
+/Users/josephwoodward/Development/Serilog.Sinks.Loki/test/Serilog.Sinks.Loki.Tests/bin/Debug/netcoreapp2.2/Serilog.Sinks.Loki.dll
+/Users/josephwoodward/Development/Serilog.Sinks.Loki/test/Serilog.Sinks.Loki.Tests/bin/Debug/netcoreapp2.2/Serilog.Sinks.Loki.pdb
+/Users/josephwoodward/Development/Serilog.Sinks.Loki/test/Serilog.Sinks.Loki.Tests/obj/Debug/netcoreapp2.2/Serilog.Sinks.Loki.Tests.csproj.CopyComplete
+/Users/josephwoodward/Development/Serilog.Sinks.Loki/test/Serilog.Sinks.Loki.Tests/obj/Debug/netcoreapp2.2/Serilog.Sinks.Loki.Tests.dll
+/Users/josephwoodward/Development/Serilog.Sinks.Loki/test/Serilog.Sinks.Loki.Tests/obj/Debug/netcoreapp2.2/Serilog.Sinks.Loki.Tests.pdb
