@@ -4,7 +4,7 @@ This is a Serilog Sink for Grafana's new [Loki Log Aggregator](https://github.co
 
 Note: It's still really early work in progress.
 
-Features:
+## Current Features:
 
 - Formats and batches log entries to Loki via HTTP
 - Ability to provide global Loki log labels
@@ -15,7 +15,7 @@ Coming soon:
 - Write logs to disk in the correct format to send via Promtail
 - Send logs to Loki via HTTP using Snappy compression
 
-Example:
+## Usage Example:
 
 ```csharp
 
