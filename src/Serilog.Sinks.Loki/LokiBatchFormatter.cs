@@ -7,20 +7,24 @@ using Serilog.Events;
 using Serilog.Formatting;
 using Serilog.Sinks.Http;
 using Serilog.Sinks.Http.BatchFormatters;
+using Serilog.Sinks.Loki.Labels;
 
 namespace Serilog.Sinks.Loki
 {
-    public class LokiEntry 
+    internal class LokiBatchFormatter : IBatchFormatter 
     {
-        [JsonProperty("ts")]
-        public string Ts { get; set; }
+        private readonly IList<LokiLabel> _globalLabels;
 
-        [JsonProperty("line")]
-        public string Line { get; set; }
-    }
-    
-    public class LokiBatchFormatter : IBatchFormatter 
-    {
+        public LokiBatchFormatter()
+        {
+            _globalLabels = new List<LokiLabel>();
+        }
+
+        public LokiBatchFormatter(IList<LokiLabel> globalLabels)
+        {
+            _globalLabels = globalLabels;
+        }
+        
         public void Format(IEnumerable<LogEvent> logEvents, ITextFormatter formatter, TextWriter output)
         {
             if (logEvents == null)
@@ -47,21 +51,31 @@ namespace Serilog.Sinks.Loki
                 
                 /*output.Write("\"labels\": \"{Level=\\\"" + logEvent.Level + "\\\"}\",")*/;
                 output.Write("\"labels\": \"{");
-                
-                AddLabel(output, "level", logEvent.Level.ToString());
 
-/*                if (logEvent.Properties.Any())
+
+                AddLabel(output, "level", logEvent.Level.ToString().ToLower());
+                
+                foreach (var label in _globalLabels)
                 {
-                    foreach (var eventProperty in logEvent.Properties)
-                    {
-                        output.Write(",");
-                        AddEventPropertyAsLabel(output, eventProperty.Key, eventProperty.Value);
-                    } 
-                }*/
+                    output.Write(",");
+                    AddLabel(output, label.Key, label.Value);
+                        
+                }
+                
+
                 
                 output.Write("}\",");
                 output.Write("\"entries\":[");
 
+                if (logEvent.Properties.Any())
+                {
+                    foreach (var eventProperty in logEvent.Properties)
+                    {
+/*                        output.Write(",");
+                        AddEventPropertyAsLabel(output, eventProperty.Key, eventProperty.Value);*/
+                    } 
+                }
+                
                 var entry = JsonConvert.SerializeObject( new LokiEntry
                 {
                     Ts = time,
@@ -93,6 +107,15 @@ namespace Serilog.Sinks.Loki
             output.Write("=\\\"");
             output.Write(value);
             output.Write("\\\"");
+        }
+
+        private static string GetLevel(LogEventLevel level)
+        {
+            if (level == LogEventLevel.Information)
+                return "info";
+
+            var r = level.ToString().ToLower();
+            return r;
         }
 
         public void Format(IEnumerable<string> logEvents, TextWriter output)

@@ -11,6 +11,7 @@
 
     <ItemGroup>
       <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+      <PackageReference Include="Serilog.Enrichers.Thread" Version="3.0.1-dev-00728" />
       <PackageReference Include="Serilog.Sinks.Async" Version="1.3.1-dev-00063" />
       <PackageReference Include="Serilog.Sinks.File" Version="4.0.1-dev-00801" />
     </ItemGroup>
