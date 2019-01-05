@@ -32,7 +32,7 @@ namespace Serilog.Sinks.Loki.Example
             var log = new LoggerConfiguration()
                     .MinimumLevel.Verbose()
                     .Enrich.FromLogContext()
-                    .WriteTo.LokiHttp("http://localhost:3100/api/prom/push", new LabelProvider())
+                    .WriteTo.LokiHttp("http://localhost:3100/api/prom/push", new LogLabelProvider())
                 .CreateLogger();
 
 /*            using (LogContext.PushProperty("A", 1))

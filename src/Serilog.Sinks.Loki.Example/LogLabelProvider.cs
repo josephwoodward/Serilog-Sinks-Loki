@@ -3,7 +3,7 @@ using Serilog.Sinks.Loki.Labels;
 
 namespace Serilog.Sinks.Loki.Example
 {
-    public class LabelProvider : ILabelProvider
+    public class LogLabelProvider : ILogLabelProvider
     {
         public IList<LokiLabel> GetLabels()
         {

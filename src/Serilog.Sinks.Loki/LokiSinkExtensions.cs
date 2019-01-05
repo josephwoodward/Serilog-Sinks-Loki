@@ -9,9 +9,9 @@ namespace Serilog.Sinks.Loki
             => LokiHttp(sinkConfiguration, requestUri, null); 
 
 
-        public static LoggerConfiguration LokiHttp(this LoggerSinkConfiguration sinkConfiguration, string requestUri, ILabelProvider labelProvider)
+        public static LoggerConfiguration LokiHttp(this LoggerSinkConfiguration sinkConfiguration, string requestUri, ILogLabelProvider logLabelProvider)
         {
-            var formatter = labelProvider != null ? new LokiBatchFormatter(labelProvider.GetLabels()) : new LokiBatchFormatter();
+            var formatter = logLabelProvider != null ? new LokiBatchFormatter(logLabelProvider.GetLabels()) : new LokiBatchFormatter();
             return sinkConfiguration.Http(requestUri, batchFormatter: formatter, httpClient: new LokiHttpClient());
         }
     }
