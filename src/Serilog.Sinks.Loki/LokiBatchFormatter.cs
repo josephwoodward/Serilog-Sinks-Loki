@@ -28,9 +28,9 @@ namespace Serilog.Sinks.Loki
         public void Format(IEnumerable<LogEvent> logEvents, ITextFormatter formatter, TextWriter output)
         {
             if (logEvents == null)
-                throw new ArgumentNullException(nameof (logEvents));
+                throw new ArgumentNullException(nameof(logEvents));
             if (output == null)
-                throw new ArgumentNullException(nameof (output));
+                throw new ArgumentNullException(nameof(output));
             
             var logs = logEvents.ToList();
             if (!logs.Any())
@@ -38,7 +38,7 @@ namespace Serilog.Sinks.Loki
 
             var count = 0;
             
-            output.Write("{ \"streams\": [");
+            output.Write("{\"streams\":[");
             foreach (var logEvent in logs)
             {
                 count++;
@@ -49,10 +49,8 @@ namespace Serilog.Sinks.Loki
                 
                 var time = localTimeAndOffset.ToString("o");
                 
-                /*output.Write("\"labels\": \"{Level=\\\"" + logEvent.Level + "\\\"}\",")*/;
-                output.Write("\"labels\": \"{");
-
-
+                // Labels
+                output.Write("\"labels\":\"{");
                 AddLabel(output, "level", logEvent.Level.ToString().ToLower());
                 
                 foreach (var label in _globalLabels)
@@ -61,8 +59,6 @@ namespace Serilog.Sinks.Loki
                     AddLabel(output, label.Key, label.Value);
                         
                 }
-                
-
                 
                 output.Write("}\",");
                 output.Write("\"entries\":[");
@@ -84,13 +80,12 @@ namespace Serilog.Sinks.Loki
                 
                 output.Write(entry);
                 
-                output.Write("]");
-                output.Write("}");
+                output.Write("]}");
                 if (count < logs.Count)
                     output.Write(",");
             }
             
-            output.Write("]}");
+            output.WriteLine("]}");
         }
 
         private static void AddEventPropertyAsLabel(TextWriter output, string eventPropertyKey, LogEventPropertyValue eventPropertyValue)

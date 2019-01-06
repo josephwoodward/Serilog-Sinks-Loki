@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using Serilog.Sinks.Loki.Labels;
 
-namespace Serilog.Sinks.Loki.Example
+namespace Serilog.Sinks.Loki.Tests
 {
-    public class LogLabelProvider : ILogLabelProvider
+    public class TestLabelProvider : ILogLabelProvider
     {
         public IList<LokiLabel> GetLabels()
         {
@@ -12,12 +12,7 @@ namespace Serilog.Sinks.Loki.Example
                 new LokiLabel
                 {
                     Key = "app",
-                    Value = "demo"
-                },
-                new LokiLabel
-                {
-                    Key = "namespace",
-                    Value = "prod"
+                    Value = "tests"
                 }
             };
         }

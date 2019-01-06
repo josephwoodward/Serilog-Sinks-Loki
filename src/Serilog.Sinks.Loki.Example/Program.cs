@@ -35,20 +35,24 @@ namespace Serilog.Sinks.Loki.Example
                     .WriteTo.LokiHttp("http://localhost:3100/api/prom/push", new LogLabelProvider())
                 .CreateLogger();
 
-/*            using (LogContext.PushProperty("A", 1))
+            using (LogContext.PushProperty("A", 1))
             {
-                log.Information("Carries property A = 1");
-            }*/
+                
+            var position = new { Latitude = 25, Longitude = 134 };
+            var elapsedMs = 34;
+/*                log.Information("Carries property A = 1");*/
+                log.Information("3# Random message processed {@Position} in {Elapsed:000} ms.", position, elapsedMs);
+            }
             
 /*            log.Information("1# Logging {@Heartbeat:l} from {Computer:l}", "SomeValue", "SomeOtherValue");*/
 
-            var position = new { Latitude = 25, Longitude = 134 };
+/*            var position = new { Latitude = 25, Longitude = 134 };
             var exception = new {Message = ex.Message, StackTrace = ex.StackTrace};
-            var elapsedMs = 34;
+            var elapsedMs = 34;*/
 
-            log.Debug(@"Does this \""break\"" something?");
+/*            log.Debug(@"Does this \""break\"" something?");
             log.Error("#2 {@Message}", exception);
-            log.Information("3# Random message processed {@Position} in {Elapsed:000} ms.", position, elapsedMs);
+            log.Information("3# Random message processed {@Position} in {Elapsed:000} ms.", position, elapsedMs);*/
             
             log.Dispose();
         }

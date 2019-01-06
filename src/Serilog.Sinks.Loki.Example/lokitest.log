@@ -1,9 +1,0 @@
-2018-12-20T18:11:01Z 2018-12-20T18:11:01Z component time="2018-12-20T18:11:01.3375540Z" level=Error 
-2018-12-20T18:11:01Z 2018-12-20T18:11:01Z component time="2018-12-20T18:11:01.5512840Z" level=Information 
-2018-12-20T18:11:01Z 2018-12-20T18:11:01Z component time="2018-12-20T18:11:01.5520080Z" level=Error 
-2018-12-20T18:12:58Z 2018-12-20T18:12:58Z component time="2018-12-20T18:12:58.4526370Z" level=Error Something went wrong
-2018-12-20T18:12:58Z 2018-12-20T18:12:58Z component time="2018-12-20T18:12:58.6161110Z" level=Information Processed { Latitude: 25, Longitude: 134 } in 034 ms.
-2018-12-20T18:12:58Z 2018-12-20T18:12:58Z component time="2018-12-20T18:12:58.6274180Z" level=Error Processed { Latitude: 25, Longitude: 134 } in 034 ms.
-2019-01-03T08:13:18Z 2019-01-03T08:13:18Z component time="2019-01-03T08:13:18.2819590Z" level=Error Something went wrong
-2019-01-03T08:13:33Z 2019-01-03T08:13:33Z component time="2019-01-03T08:13:33.0033810Z" level=Information Processed { Latitude: 25, Longitude: 134 } in 034 ms.
-2019-01-03T08:13:36Z 2019-01-03T08:13:36Z component time="2019-01-03T08:13:36.1049980Z" level=Error Processed { Latitude: 25, Longitude: 134 } in 034 ms.

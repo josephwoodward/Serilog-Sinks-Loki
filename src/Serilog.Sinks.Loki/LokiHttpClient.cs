@@ -5,16 +5,20 @@ using Serilog.Sinks.Http;
 
 namespace Serilog.Sinks.Loki
 {
-    internal class LokiHttpClient : IHttpClient
+    public class LokiHttpClient : IHttpClient
     {
         private readonly HttpClient _client;
 
-        public LokiHttpClient()
+        public LokiHttpClient() : this(null)
         {
-            _client = new HttpClient();
+        }
+        
+        public LokiHttpClient(HttpClient httpClient)
+        {
+            _client = httpClient ?? new HttpClient();
         }
 
-        public async Task<HttpResponseMessage> PostAsync(string requestUri, HttpContent content)
+        public virtual async Task<HttpResponseMessage> PostAsync(string requestUri, HttpContent content)
         {
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             
@@ -26,7 +30,7 @@ namespace Serilog.Sinks.Loki
             return response;
         }
         
-        public void Dispose()
+        public virtual void Dispose()
             => _client.Dispose();
     }
 }

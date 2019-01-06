@@ -1,24 +1,56 @@
-using System;
-using System.IO;
-using Serilog;
-using Serilog.Sinks.Loki;
+using System.Linq;
+using Newtonsoft.Json;
+using Shouldly;
 using Xunit;
 
-namespace erilog.Sinks.Loki.Tests
+namespace Serilog.Sinks.Loki.Tests
 {
-    public class UnitTest1
+    public class UnitTest1 : IClassFixture<HttpClientTestFixture>
     {
-        [Fact]
-        public void Test1()
-        {
+        private readonly HttpClientTestFixture _httpClientTestFixture;
+        private readonly TestHttpClient _client;
 
+        public UnitTest1(HttpClientTestFixture httpClientTestFixture)
+        {
+            _httpClientTestFixture = httpClientTestFixture;
+            _client = new TestHttpClient();
+        }
+        
+        [Fact]
+        public void RequestUriIsCorrect()
+        {
+            // Arrange
+            const string requestUri = "http://test:80";
+            
             var log = new LoggerConfiguration()
                 .MinimumLevel.Information()
-                /*.WriteTo.Loki()*/
+                .WriteTo.LokiHttp(requestUri, null, _client)
                 .CreateLogger();
             
+            // Act
             log.Error("Something's wrong");
+            log.Dispose();
 
+            // Assert
+            _client.RequestUri.ShouldBe(requestUri);
+        }
+        
+        [Fact]
+        public void GlobalLabelsCanBeSet()
+        {
+            // Arrange
+            var log = new LoggerConfiguration()
+                .MinimumLevel.Information()
+                .WriteTo.LokiHttp("http://test:80", new TestLabelProvider(), _client)
+                .CreateLogger();
+            
+            // Act
+            log.Error("Something's wrong");
+            log.Dispose();
+            
+            // Assert
+            var response = JsonConvert.DeserializeObject<TestResponse>(_client.Content);
+            response.Streams.First().Labels.ShouldBe("{level=\"error\",app=\"tests\"}");
         }
     }
 }
