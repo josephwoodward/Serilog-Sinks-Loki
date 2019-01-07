@@ -32,3 +32,14 @@ var position = new { Latitude = 25, Longitude = 134 };
 var elapsedMs = 34;
 log.Information("Message processed {@Position} in {Elapsed:000} ms.", position, elapsedMs);
 ```
+
+### Adding global labels
+
+Global labels can be added by implementing the `ILogLabelProvider` class:
+
+```csharp
+public class GlobalLabelsDefinition : ILogLabelProvider {
+
+
+}
+```
