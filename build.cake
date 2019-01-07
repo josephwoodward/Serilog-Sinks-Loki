@@ -11,9 +11,9 @@ var configuration = Argument("configuration", "Release");
 //////////////////////////////////////////////////////////////////////
 
 // Define directories.
-var buildDir = Directory("./src/GlobalExceptionHandler/bin") + Directory(configuration);
-var solution = "./src/GlobalExceptionHandler.sln";
-var projectName = "GlobalExceptionHandler";
+var buildDir = Directory("./src/Serilog.Sinks.Loki/bin") + Directory(configuration);
+var solution = "./src/Serilog.Sinks.Loki.sln";
+var projectName = "Serilog.Sinks.Loki";
 
 //////////////////////////////////////////////////////////////////////
 // TASKS
