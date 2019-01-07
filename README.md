@@ -32,3 +32,29 @@ var position = new { Latitude = 25, Longitude = 134 };
 var elapsedMs = 34;
 log.Information("Message processed {@Position} in {Elapsed:000} ms.", position, elapsedMs);
 ```
+
+### Adding global labels
+
+Global labels can be added by implementing the `ILogLabelProvider` class and passing the implementation to your Serilog Loki Sink configuration:
+
+```csharp
+public class LogLabelProvider : ILogLabelProvider {
+
+    public IList<LokiLabel> GetLabels()
+    {
+        return new List<LokiLabel>
+        {
+            new LokiLabel { Key = "app", Value = "demoapp" },
+            new LokiLabel { Key = "environment", Value = "production" }
+        };
+    }
+
+}
+```
+```csharp
+var log = new LoggerConfiguration()
+        .MinimumLevel.Verbose()
+        .Enrich.FromLogContext()
+        .WriteTo.LokiHttp("http://localhost:3100/api/prom/push", new LogLabelProvider())
+        .CreateLogger();
+```
