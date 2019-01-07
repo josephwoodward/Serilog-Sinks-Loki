@@ -35,7 +35,7 @@ log.Information("Message processed {@Position} in {Elapsed:000} ms.", position, 
 
 ### Adding global labels
 
-Global labels can be added by implementing the `ILogLabelProvider` class:
+Global labels can be added by implementing the `ILogLabelProvider` class and passing the implementation to your Serilog Loki Sink configuration:
 
 ```csharp
 public class LogLabelProvider : ILogLabelProvider {
@@ -51,8 +51,6 @@ public class LogLabelProvider : ILogLabelProvider {
 
 }
 ```
-This class can then be passed to the Loki sink when configuring it:
-
 ```csharp
 var log = new LoggerConfiguration()
         .MinimumLevel.Verbose()
