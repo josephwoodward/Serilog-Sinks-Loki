@@ -1,7 +1,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Serilog.Sinks.Loki.Tests
+namespace Serilog.Sinks.Loki.Tests.Infrastructure
 {
     public class TestHttpClient : LokiHttpClient
     {

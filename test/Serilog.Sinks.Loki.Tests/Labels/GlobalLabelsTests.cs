@@ -1,16 +1,17 @@
 using System.Linq;
 using Newtonsoft.Json;
+using Serilog.Sinks.Loki.Tests.Infrastructure;
 using Shouldly;
 using Xunit;
 
-namespace Serilog.Sinks.Loki.Tests
+namespace Serilog.Sinks.Loki.Tests.Labels
 {
-    public class UnitTest1 : IClassFixture<HttpClientTestFixture>
+    public class GlobalLabelsTests : IClassFixture<HttpClientTestFixture>
     {
         private readonly HttpClientTestFixture _httpClientTestFixture;
         private readonly TestHttpClient _client;
 
-        public UnitTest1(HttpClientTestFixture httpClientTestFixture)
+        public GlobalLabelsTests(HttpClientTestFixture httpClientTestFixture)
         {
             _httpClientTestFixture = httpClientTestFixture;
             _client = new TestHttpClient();
