@@ -88,6 +88,11 @@ namespace Serilog.Sinks.Loki
             output.WriteLine("]}");
         }
 
+        public void Format(IEnumerable<string> logEvents, TextWriter output)
+        {
+            throw new NotImplementedException();
+        }
+
         private static void AddEventPropertyAsLabel(TextWriter output, string eventPropertyKey, LogEventPropertyValue eventPropertyValue)
         {
             output.Write(eventPropertyKey);
@@ -111,11 +116,6 @@ namespace Serilog.Sinks.Loki
 
             var r = level.ToString().ToLower();
             return r;
-        }
-
-        public void Format(IEnumerable<string> logEvents, TextWriter output)
-        {
-            var res = 1;
         }
     }
 }
