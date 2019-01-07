@@ -38,16 +38,25 @@ log.Information("Message processed {@Position} in {Elapsed:000} ms.", position, 
 Global labels can be added by implementing the `ILogLabelProvider` class:
 
 ```csharp
-public class LogLabelProvider : ILogLabelProvider
-        {
-        public IList<LokiLabel> GetLabels()
-        {
-            return new List<LokiLabel>
-            {
-                new LokiLabel { Key = "app", Value = "demoapp" },
-                new LokiLabel { Key = "environment", Value = "production" }
-            };
-        }
-}
+public class LogLabelProvider : ILogLabelProvider {
 
+    public IList<LokiLabel> GetLabels()
+    {
+        return new List<LokiLabel>
+        {
+            new LokiLabel { Key = "app", Value = "demoapp" },
+            new LokiLabel { Key = "environment", Value = "production" }
+        };
+    }
+
+}
+```
+This class can then be passed to the Loki sink when configuring it:
+
+```csharp
+var log = new LoggerConfiguration()
+        .MinimumLevel.Verbose()
+        .Enrich.FromLogContext()
+        .WriteTo.LokiHttp("http://localhost:3100/api/prom/push", new LogLabelProvider())
+        .CreateLogger();
 ```
