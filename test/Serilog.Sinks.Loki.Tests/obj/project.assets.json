@@ -629,14 +629,13 @@
           "lib/netstandard1.3/Serilog.dll": {}
         }
       },
-      "Serilog.Sinks.File/4.0.1-dev-00801": {
+      "Serilog.Sinks.File/3.2.0": {
         "type": "package",
         "dependencies": {
-          "Serilog": "2.5.0",
+          "Serilog": "2.3.0",
           "System.IO": "4.1.0",
           "System.IO.FileSystem": "4.0.1",
           "System.IO.FileSystem.Primitives": "4.0.1",
-          "System.Runtime.InteropServices": "4.1.0",
           "System.Text.Encoding.Extensions": "4.0.11",
           "System.Threading": "4.0.11",
           "System.Threading.Timer": "4.0.1"
@@ -717,18 +716,6 @@
         },
         "runtime": {
           "lib/netstandard2.0/Shouldly.dll": {}
-        }
-      },
-      "Snappy.Standard/0.2.0": {
-        "type": "package",
-        "dependencies": {
-          "NETStandard.Library": "1.6.0"
-        },
-        "compile": {
-          "lib/netstandard1.6/Snappy.Standard.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard1.6/Snappy.Standard.dll": {}
         }
       },
       "System.AppContext/4.1.0": {
@@ -1753,15 +1740,13 @@
           "build/netcoreapp1.0/xunit.runner.visualstudio.props": {}
         }
       },
-      "Serilog.Sinks.Loki/1.0.0": {
+      "Serilog.Sinks.Loki/1.0.0-beta": {
         "type": "project",
         "framework": ".NETStandard,Version=v2.0",
         "dependencies": {
           "Newtonsoft.Json": "12.0.1",
           "Serilog": "2.7.2-dev-01033",
-          "Serilog.Sinks.File": "4.0.1-dev-00801",
-          "Serilog.Sinks.Http": "5.0.1",
-          "Snappy.Standard": "0.2.0"
+          "Serilog.Sinks.Http": "5.0.1"
         },
         "compile": {
           "bin/placeholder/Serilog.Sinks.Loki.dll": {}
@@ -2761,20 +2746,18 @@
         "serilog.nuspec"
       ]
     },
-    "Serilog.Sinks.File/4.0.1-dev-00801": {
-      "sha512": "ngzPtmcTyr2AldLAqa3OZEgwE0GRbRSHkCvefjEFv+nGpMnTEnQvdznrSWAhz4olZjCYs13UKJc3aQr0eXuiRg==",
+    "Serilog.Sinks.File/3.2.0": {
+      "sha512": "4MfJ2XUzkUsF6Qk8SwU9KDQxcJgcSR2bWoLIc6lEIVlr+mqblDaxYo4NRCijk4MBonwl829E7HxSud8MU5uC3g==",
       "type": "package",
-      "path": "serilog.sinks.file/4.0.1-dev-00801",
+      "path": "serilog.sinks.file/3.2.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "lib/net45/Serilog.Sinks.File.dll",
-        "lib/net45/Serilog.Sinks.File.pdb",
         "lib/net45/Serilog.Sinks.File.xml",
         "lib/netstandard1.3/Serilog.Sinks.File.dll",
-        "lib/netstandard1.3/Serilog.Sinks.File.pdb",
         "lib/netstandard1.3/Serilog.Sinks.File.xml",
-        "serilog.sinks.file.4.0.1-dev-00801.nupkg.sha512",
+        "serilog.sinks.file.3.2.0.nupkg.sha512",
         "serilog.sinks.file.nuspec"
       ]
     },
@@ -2857,18 +2840,6 @@
         "lib/netstandard2.0/Shouldly.pdb",
         "shouldly.3.0.2.nupkg.sha512",
         "shouldly.nuspec"
-      ]
-    },
-    "Snappy.Standard/0.2.0": {
-      "sha512": "fVGI7vff1b1ymfKgXQpLnquBVP8FgdNuQ/j4O48kcjz7RheCYFWpXQHTSG1gMNsJZLHddM4vQuktvUC1N/uqlg==",
-      "type": "package",
-      "path": "snappy.standard/0.2.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "lib/netstandard1.6/Snappy.Standard.dll",
-        "snappy.standard.0.2.0.nupkg.sha512",
-        "snappy.standard.nuspec"
       ]
     },
     "System.AppContext/4.1.0": {
@@ -6064,7 +6035,7 @@
         "xunit.runner.visualstudio.nuspec"
       ]
     },
-    "Serilog.Sinks.Loki/1.0.0": {
+    "Serilog.Sinks.Loki/1.0.0-beta": {
       "type": "project",
       "path": "../../src/Serilog.Sinks.Loki/Serilog.Sinks.Loki.csproj",
       "msbuildProject": "../../src/Serilog.Sinks.Loki/Serilog.Sinks.Loki.csproj"
@@ -6076,7 +6047,7 @@
       "Microsoft.NET.Test.Sdk >= 15.9.0",
       "Microsoft.NETCore.App >= 2.2.0",
       "Newtonsoft.Json >= 12.0.1",
-      "Serilog.Sinks.Loki >= 1.0.0",
+      "Serilog.Sinks.Loki >= 1.0.0-beta",
       "Serilog.Sinks.TextWriter >= 2.1.0",
       "Shouldly >= 3.0.2",
       "xunit >= 2.4.0",

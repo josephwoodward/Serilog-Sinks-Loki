@@ -2,14 +2,23 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
+        <VersionPrefix>1.0.0-beta</VersionPrefix>
+        <AssemblyName>Serilog.Sinks.Loki</AssemblyName>
+        <PackageId>Serilog.Sinks.Loki</PackageId>
+        <PackageTags>loki,serilog,sinks</PackageTags>
+        <title>Serilog.Sinks.Loki</title>
+        <PackageReleaseNotes>https://github.com/JosephWoodward/Serilog.Sinks.Loki</PackageReleaseNotes>
+        <Authors>Joseph Woodward</Authors>
+        <Description>A Serilog Sink for Grafana's Loki log aggregator</Description>
+        <PackageProjectUrl>https://github.com/JosephWoodward/Serilog.Sinks.Loki</PackageProjectUrl>
+        <PackageIconUrl>https://github.com/JosephWoodward/Serilog.Sinks.Loki/master/assets/logo_128_128.png</PackageIconUrl>
+        <PackageLicenseUrl>https://github.com/JosephWoodward/Serilog.Sinks.Loki/blob/master/LICENSE</PackageLicenseUrl>
     </PropertyGroup>
 
     <ItemGroup>
       <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
       <PackageReference Include="Serilog" Version="2.7.2-dev-01033" />
-      <PackageReference Include="Serilog.Sinks.File" Version="4.0.1-dev-00801" />
       <PackageReference Include="Serilog.Sinks.Http" Version="5.0.1" />
-      <PackageReference Include="Snappy.Standard" Version="0.2.0" />
     </ItemGroup>
 
 </Project>
