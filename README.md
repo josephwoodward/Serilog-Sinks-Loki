@@ -15,22 +15,23 @@ Coming soon:
 - Write logs to disk in the correct format to send via Promtail
 - Send logs to Loki via HTTP using Snappy compression
 
-## Usage Example:
+## Basic Example:
 
 ```csharp
-
-var log = new LoggerConfiguration()
-        .MinimumLevel.Verbose()
+Log.Logger = new LoggerConfiguration()
+        .MinimumLevel.Information()
         .Enrich.FromLogContext()
-        .WriteTo.LokiHttp("http://localhost:3100/api/prom/push", new CustomLogLabelProvider())
+        .WriteTo.LokiHttp("http://localhost:3100/api/prom/push")
         .CreateLogger();
 
 var exception = new {Message = ex.Message, StackTrace = ex.StackTrace};
-log.Error(exception);
+Log.Error(exception);
 
 var position = new { Latitude = 25, Longitude = 134 };
 var elapsedMs = 34;
-log.Information("Message processed {@Position} in {Elapsed:000} ms.", position, elapsedMs);
+Log.Information("Message processed {@Position} in {Elapsed:000} ms.", position, elapsedMs);
+
+Log.CloseAndFlush();
 ```
 
 ### Adding global labels
@@ -57,4 +58,20 @@ var log = new LoggerConfiguration()
         .Enrich.FromLogContext()
         .WriteTo.LokiHttp("http://localhost:3100/api/prom/push", new LogLabelProvider())
         .CreateLogger();
+```
+
+### Custom HTTP Client
+
+Under the cover, Serilog.Loki.Sink uses the popular [Serilog.Sinks.Http](https://github.com/FantasticFiasco/serilog-sinks-http) library to post log entries to Loki. With this in mind you can you can extend the default HttpClient (`LokiHttpClient`), or replace it entirely by implementing `IHttpClient`.
+
+```csharp
+// ExampleHttpClient.cs
+
+public class ExampleHttpClient : LokiHttpClient
+{
+    public override Task<HttpResponseMessage> PostAsync(string requestUri, HttpContent content)
+    {
+        return base.PostAsync(requestUri, content);
+    }
+}
 ```

@@ -7,7 +7,7 @@
         <PackageId>Serilog.Sinks.Loki</PackageId>
         <PackageTags>loki,serilog,sinks</PackageTags>
         <title>Serilog.Sinks.Loki</title>
-        <PackageReleaseNotes>https://github.com/JosephWoodward/Serilog.Sinks.Loki</PackageReleaseNotes>
+        <PackageReleaseNotes>https://github.com/JosephWoodward/Serilog-Sinks-Loki/releases/tag/1.0.0-beta</PackageReleaseNotes>
         <Authors>Joseph Woodward</Authors>
         <Description>A Serilog Sink for Grafana's Loki log aggregator</Description>
         <PackageProjectUrl>https://github.com/JosephWoodward/Serilog-Sinks-Loki</PackageProjectUrl>
