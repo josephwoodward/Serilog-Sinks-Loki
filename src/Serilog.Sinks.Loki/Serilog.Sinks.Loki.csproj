@@ -10,9 +10,9 @@
         <PackageReleaseNotes>https://github.com/JosephWoodward/Serilog.Sinks.Loki</PackageReleaseNotes>
         <Authors>Joseph Woodward</Authors>
         <Description>A Serilog Sink for Grafana's Loki log aggregator</Description>
-        <PackageProjectUrl>https://github.com/JosephWoodward/Serilog.Sinks.Loki</PackageProjectUrl>
-        <PackageIconUrl>https://github.com/JosephWoodward/Serilog.Sinks.Loki/master/assets/logo_128_128.png</PackageIconUrl>
-        <PackageLicenseUrl>https://github.com/JosephWoodward/Serilog.Sinks.Loki/blob/master/LICENSE</PackageLicenseUrl>
+        <PackageProjectUrl>https://github.com/JosephWoodward/Serilog-Sinks-Loki</PackageProjectUrl>
+        <PackageIconUrl>https://raw.githubusercontent.com/JosephWoodward/Serilog-Sinks-Loki/master/assets/logo_128_128.png</PackageIconUrl>
+        <PackageLicenseUrl>https://github.com/JosephWoodward/Serilog-Sinks-Loki/blob/master/LICENSE</PackageLicenseUrl>
     </PropertyGroup>
 
     <ItemGroup>
