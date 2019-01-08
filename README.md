@@ -36,7 +36,7 @@ Log.CloseAndFlush();
 
 ### Adding global labels
 
-Global labels can be added by implementing the `ILogLabelProvider` class and passing the implementation to your Serilog Loki Sink configuration:
+Loki indexes and groups log streams using labels, in Serilog.Sinks.Loki you can attach labels to all log entries by passing an implementation `ILogLabelProvider` to the `WriteTo.LokiHttp(..)` configuratino method. This is idea for labels such as instance IDs, environments and application names:
 
 ```csharp
 public class LogLabelProvider : ILogLabelProvider {
@@ -62,7 +62,7 @@ var log = new LoggerConfiguration()
 
 ### Custom HTTP Client
 
-Under the cover, Serilog.Loki.Sink uses the popular [Serilog.Sinks.Http](https://github.com/FantasticFiasco/serilog-sinks-http) library to post log entries to Loki. With this in mind you can you can extend the default HttpClient (`LokiHttpClient`), or replace it entirely by implementing `IHttpClient`.
+Serilog.Loki.Sink is built on top of the popular [Serilog.Sinks.Http](https://github.com/FantasticFiasco/serilog-sinks-http) library to post log entries to Loki. With this in mind you can you can extend the default HttpClient (`LokiHttpClient`), or replace it entirely by implementing `IHttpClient`.
 
 ```csharp
 // ExampleHttpClient.cs
@@ -74,4 +74,13 @@ public class ExampleHttpClient : LokiHttpClient
         return base.PostAsync(requestUri, content);
     }
 }
+```
+```csharp
+// Usage
+
+var log = new LoggerConfiguration()
+        .MinimumLevel.Verbose()
+        .Enrich.FromLogContext()
+        .WriteTo.LokiHttp("http://localhost:3100/api/prom/push", new LogLabelProvider(), new ExampleHttpClient())
+        .CreateLogger();
 ```
