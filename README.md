@@ -60,6 +60,10 @@ var log = new LoggerConfiguration()
         .CreateLogger();
 ```
 
+### Local, contextual labels
+
+In some occasions you'll want to add labels to your log stream within a particular class or method, this feature isn't quite finished yet but will be available soon.
+
 ### Custom HTTP Client
 
 Serilog.Loki.Sink is built on top of the popular [Serilog.Sinks.Http](https://github.com/FantasticFiasco/serilog-sinks-http) library to post log entries to Loki. With this in mind you can you can extend the default HttpClient (`LokiHttpClient`), or replace it entirely by implementing `IHttpClient`.
