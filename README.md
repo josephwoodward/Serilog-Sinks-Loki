@@ -20,6 +20,19 @@ Coming soon:
 - Write logs to disk in the correct format to send via Promtail
 - Send logs to Loki via HTTP using Snappy compression
 
+## Installation
+
+The Serilog.Sinks.Loki NuGet [package can be found here](https://www.nuget.org/packages/Serilog.Sinks.Loki/). Alternatively you can install it via one of the following commands below:
+
+NuGet command:
+```bash
+Install-Package Serilog.Sinks.Loki
+```
+.NET Core CLI:
+```bash
+dotnet add package Serilog.Sinks.Loki
+```
+
 ## Basic Example:
 
 ```csharp
@@ -93,3 +106,6 @@ var log = new LoggerConfiguration()
         .WriteTo.LokiHttp("http://localhost:3100/api/prom/push", new LogLabelProvider(), new ExampleHttpClient())
         .CreateLogger();
 ```
+
+### Missing a feature or want to contribute?
+This package is still in its infancy so if there's anything missing then please feel free to raise a feature request, either that or pull requests are most welcome!
