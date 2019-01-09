@@ -1,10 +1,20 @@
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Serilog.Sinks.Http;
- 
+using Serilog.Sinks.Loki.Labels;
+
 namespace Serilog.Sinks.Loki
 {
+    public class TestLabels : ILogLabelProvider
+    {
+        public IList<LokiLabel> GetLabels()
+        {
+            throw new System.NotImplementedException();
+        }
+    }
+    
     public class LokiHttpClient : IHttpClient
     {
         protected readonly HttpClient HttpClient;

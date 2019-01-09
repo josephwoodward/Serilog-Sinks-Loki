@@ -35,8 +35,10 @@ namespace Serilog.Sinks.Loki.Example
                     .WriteTo.LokiHttp("http://localhost:3100/api/prom/push", new LogLabelProvider(), new LokiExampleHttpClient())
                 .CreateLogger();
 
+            
             using (LogContext.PushProperty("A", 1))
             {
+                
                 
             var position = new { Latitude = 25, Longitude = 134 };
             var elapsedMs = 34;

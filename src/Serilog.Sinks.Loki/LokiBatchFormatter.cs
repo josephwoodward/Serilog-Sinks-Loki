@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
@@ -49,6 +50,9 @@ namespace Serilog.Sinks.Loki
                 
                 var time = localTimeAndOffset.ToString("o");
                 
+                if (logEvent.Level == LogEventLevel.Error)
+                    Console.WriteLine("Ooops");
+                
                 // Labels
                 output.Write("\"labels\":\"{");
                 AddLabel(output, "level", logEvent.Level.ToString().ToLower());
@@ -71,12 +75,17 @@ namespace Serilog.Sinks.Loki
                         AddEventPropertyAsLabel(output, eventProperty.Key, eventProperty.Value);*/
                     } 
                 }
-                
-                var entry = JsonConvert.SerializeObject( new LokiEntry
+
+                var e = new LokiEntry
                 {
                     Ts = time,
                     Line = logEvent.RenderMessage()
-                });
+                };
+
+                if (logEvent.Exception != null)
+                    e.Line += "\n\n" + logEvent.Exception.ToStringDemystified();
+                
+                var entry = JsonConvert.SerializeObject(e);
                 
                 output.Write(entry);
                 
