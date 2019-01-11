@@ -9,10 +9,12 @@ namespace Serilog.Sinks.Loki.Tests.Labels
     public class LogLevelTests
     {
         private readonly TestHttpClient _client;
+        private readonly BasicAuthCredentials _credentials;
 
         public LogLevelTests()
         {
             _client = new TestHttpClient();
+            _credentials = new BasicAuthCredentials("http://test:80", "Walter", "White");
         }
         
         [Fact]
@@ -21,7 +23,7 @@ namespace Serilog.Sinks.Loki.Tests.Labels
             // Arrange
             var log = new LoggerConfiguration()
                 .MinimumLevel.Debug()
-                .WriteTo.LokiHttp("http://test:80", null, _client)
+                .WriteTo.LokiHttp(_credentials, httpClient: _client)
                 .CreateLogger();
             
             // Act
@@ -39,7 +41,7 @@ namespace Serilog.Sinks.Loki.Tests.Labels
             // Arrange
             var log = new LoggerConfiguration()
                 .MinimumLevel.Information()
-                .WriteTo.LokiHttp("http://test:80", null, _client)
+                .WriteTo.LokiHttp(_credentials, httpClient: _client)
                 .CreateLogger();
             
             // Act
@@ -57,7 +59,7 @@ namespace Serilog.Sinks.Loki.Tests.Labels
             // Arrange
             var log = new LoggerConfiguration()
                 .MinimumLevel.Error()
-                .WriteTo.LokiHttp("http://test:80", null, _client)
+                .WriteTo.LokiHttp(_credentials, httpClient: _client)
                 .CreateLogger();
             
             // Act

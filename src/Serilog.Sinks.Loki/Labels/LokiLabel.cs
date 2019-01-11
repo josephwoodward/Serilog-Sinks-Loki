@@ -2,8 +2,14 @@ namespace Serilog.Sinks.Loki.Labels
 {
     public class LokiLabel
     {
-        public string Key { get; set; }
+        public LokiLabel(string key, string value)
+        {
+            Key = key;
+            Value = value;
+        }
 
-        public string Value { get; set; }
+        public string Key { get; }
+
+        public string Value { get; }
     }
 }

@@ -5,21 +5,18 @@ namespace Serilog.Sinks.Loki.Tests.Infrastructure
 {
     public class TestHttpClient : LokiHttpClient
     {
-        public override Task<HttpResponseMessage> PostAsync(string requestUri, HttpContent content)
+        public override async Task<HttpResponseMessage> PostAsync(string requestUri, HttpContent content)
         {
-            Content = content.ReadAsStringAsync().Result;
+            Content = await content.ReadAsStringAsync();
             RequestUri = requestUri;
 
-            return Task.FromResult(new HttpResponseMessage());
+            return new HttpResponseMessage();
         }
+
+        public HttpClient Client => HttpClient;
 
         public string Content;
 
         public string RequestUri;
-
-        public override void Dispose()
-        {
-            base.Dispose();
-        }
     }
 }

@@ -1,14 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
-using System.Xml;
-using System.Xml.Linq;
 using Serilog.Context;
-using Serilog.Core;
-using Serilog.Sinks.Http;
 using Serilog.Sinks.Http.BatchFormatters;
 
 namespace Serilog.Sinks.Loki.Example
@@ -29,10 +20,11 @@ namespace Serilog.Sinks.Loki.Example
                 ex = e;
             }
             
+            var credentials = new NoAuthCredentials("http://localhost:3100");
             var log = new LoggerConfiguration()
                     .MinimumLevel.Verbose()
                     .Enrich.FromLogContext()
-                    .WriteTo.LokiHttp("http://localhost:3100/api/prom/push", new LogLabelProvider(), new LokiExampleHttpClient())
+                    .WriteTo.LokiHttp(credentials, new LogLabelProvider(), new LokiExampleHttpClient())
                 .CreateLogger();
 
             

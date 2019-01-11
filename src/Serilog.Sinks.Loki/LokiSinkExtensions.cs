@@ -6,20 +6,20 @@ namespace Serilog.Sinks.Loki
 {
     public static class LokiSinkExtensions
     {
-        public static LoggerConfiguration LokiHttp(this LoggerSinkConfiguration sinkConfiguration, string requestUri)
-            => LokiHttp(sinkConfiguration, requestUri, null); 
-
-        public static LoggerConfiguration LokiHttp(this LoggerSinkConfiguration sinkConfiguration, string requestUri, ILogLabelProvider labelProvider)
-            => LokiHttp(sinkConfiguration, requestUri, labelProvider, null); 
-
-        public static LoggerConfiguration LokiHttp(this LoggerSinkConfiguration sinkConfiguration, string requestUri, ILogLabelProvider labelProvider, LokiHttpClient httpClient)
-            => LokiHttpImpl(sinkConfiguration, requestUri, labelProvider, httpClient); 
+        public static LoggerConfiguration LokiHttp(this LoggerSinkConfiguration sinkConfiguration, LokiCredentials credentials, ILogLabelProvider labelProvider = null, LokiHttpClient httpClient = null)
+            => LokiHttpImpl(sinkConfiguration, credentials, labelProvider, httpClient); 
         
-        private static LoggerConfiguration LokiHttpImpl(this LoggerSinkConfiguration sinkConfiguration, string requestUri, ILogLabelProvider logLabelProvider, IHttpClient httpClient)
+        private static LoggerConfiguration LokiHttpImpl(this LoggerSinkConfiguration sinkConfiguration, LokiCredentials credentials, ILogLabelProvider logLabelProvider, IHttpClient httpClient)
         {
             var formatter = logLabelProvider != null ? new LokiBatchFormatter(logLabelProvider.GetLabels()) : new LokiBatchFormatter();
             
-            return sinkConfiguration.Http(requestUri, batchFormatter: formatter, httpClient: httpClient ?? new LokiHttpClient());
+            var client = httpClient ?? new LokiHttpClient();
+            if (client is LokiHttpClient c)
+            {
+                c.SetAuthCredentials(credentials);
+            }
+            
+            return sinkConfiguration.Http(LokiRouteBuilder.BuildPostUri(credentials.Url), batchFormatter: formatter, httpClient: client);
         }
     }
 }

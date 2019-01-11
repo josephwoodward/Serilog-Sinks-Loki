@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Serilog.Events;
 
 namespace Serilog.Sinks.Loki.ExampleWebApp
@@ -15,12 +9,14 @@ namespace Serilog.Sinks.Loki.ExampleWebApp
     {
         public static int Main(string[] args)
         {
+            var credentials = new NoAuthCredentials("http://localhost:3100");
+            
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
                 .Enrich.FromLogContext()
                 .WriteTo.Console()
-                .WriteTo.LokiHttp("http://localhost:3100/api/prom/push", null, new LokiHttpClient())
+                .WriteTo.LokiHttp(credentials)
                 .CreateLogger();
 
             try

@@ -9,11 +9,7 @@ namespace Serilog.Sinks.Loki.Tests.Infrastructure
         {
             return new List<LokiLabel>
             {
-                new LokiLabel
-                {
-                    Key = "app",
-                    Value = "tests"
-                }
+                new LokiLabel("app", "tests")
             };
         }
     }

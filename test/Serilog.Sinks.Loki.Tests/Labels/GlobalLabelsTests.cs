@@ -10,30 +10,13 @@ namespace Serilog.Sinks.Loki.Tests.Labels
     {
         private readonly HttpClientTestFixture _httpClientTestFixture;
         private readonly TestHttpClient _client;
+        private readonly BasicAuthCredentials _credentials;
 
         public GlobalLabelsTests(HttpClientTestFixture httpClientTestFixture)
         {
             _httpClientTestFixture = httpClientTestFixture;
             _client = new TestHttpClient();
-        }
-        
-        [Fact]
-        public void RequestUriIsCorrect()
-        {
-            // Arrange
-            const string requestUri = "http://test:80";
-            
-            var log = new LoggerConfiguration()
-                .MinimumLevel.Information()
-                .WriteTo.LokiHttp(requestUri, null, _client)
-                .CreateLogger();
-            
-            // Act
-            log.Error("Something's wrong");
-            log.Dispose();
-
-            // Assert
-            _client.RequestUri.ShouldBe(requestUri);
+            _credentials = new BasicAuthCredentials("http://test:80", "Walter", "White");
         }
         
         [Fact]
@@ -42,7 +25,7 @@ namespace Serilog.Sinks.Loki.Tests.Labels
             // Arrange
             var log = new LoggerConfiguration()
                 .MinimumLevel.Information()
-                .WriteTo.LokiHttp("http://test:80", new TestLabelProvider(), _client)
+                .WriteTo.LokiHttp(_credentials, new TestLabelProvider(), _client)
                 .CreateLogger();
             
             // Act

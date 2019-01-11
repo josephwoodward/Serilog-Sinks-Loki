@@ -9,16 +9,8 @@ namespace Serilog.Sinks.Loki.Example
         {
             return new List<LokiLabel>
             {
-                new LokiLabel
-                {
-                    Key = "app",
-                    Value = "demo"
-                },
-                new LokiLabel
-                {
-                    Key = "namespace",
-                    Value = "prod"
-                }
+                new LokiLabel("app", "demo"),
+                new LokiLabel("namespace", "prod")
             };
         }
     }
