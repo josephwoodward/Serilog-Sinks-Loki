@@ -12,7 +12,7 @@
         <Description>A Serilog Sink for Grafana's Loki log aggregator</Description>
         <PackageProjectUrl>https://github.com/JosephWoodward/Serilog-Sinks-Loki</PackageProjectUrl>
         <PackageIconUrl>https://raw.githubusercontent.com/JosephWoodward/Serilog-Sinks-Loki/master/assets/logo_128_128.png</PackageIconUrl>
-        <PackageLicenseUrl>https://github.com/JosephWoodward/Serilog-Sinks-Loki/blob/master/LICENSE</PackageLicenseUrl>
+        <PackageLicense>https://github.com/JosephWoodward/Serilog-Sinks-Loki/blob/master/LICENSE</PackageLicense>
     </PropertyGroup>
 
     <ItemGroup>
