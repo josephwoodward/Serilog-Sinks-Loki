@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
-        <VersionPrefix>1.0.0-beta2</VersionPrefix>
+        <VersionPrefix>1.0.0-beta3</VersionPrefix>
         <AssemblyName>Serilog.Sinks.Loki</AssemblyName>
         <PackageId>Serilog.Sinks.Loki</PackageId>
         <PackageTags>loki,serilog,sinks</PackageTags>
