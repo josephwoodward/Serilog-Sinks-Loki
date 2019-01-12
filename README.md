@@ -8,6 +8,8 @@ What is Loki?
 
 You can find more information about what Loki is over on [Grafana's website here](https://grafana.com/loki).
 
+![Loki Screenshot](https://raw.githubusercontent.com/JosephWoodward/Serilog-Sinks-Loki/master/assets/screenshot.png) 
+
 ## Current Features:
 
 - Formats and batches log entries to Loki via HTTP
