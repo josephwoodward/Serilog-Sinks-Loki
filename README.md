@@ -37,6 +37,7 @@ dotnet add package Serilog.Sinks.Loki
 
 ```csharp
 // var credentials = new BasicAuthCredentials("http://localhost:3100", "<username>", "<password>");
+
 var credentials = new NoAuthCredentials("http://localhost:3100");
 Log.Logger = new LoggerConfiguration()
         .MinimumLevel.Information()
@@ -73,10 +74,11 @@ public class LogLabelProvider : ILogLabelProvider {
 }
 ```
 ```csharp
+var credentials = new BasicAuthCredentials("http://localhost:3100", "<username>", "<password>");
 var log = new LoggerConfiguration()
         .MinimumLevel.Verbose()
         .Enrich.FromLogContext()
-        .WriteTo.LokiHttp("http://localhost:3100/api/prom/push", new LogLabelProvider())
+        .WriteTo.LokiHttp(credentials, new LogLabelProvider())
         .CreateLogger();
 ```
 
@@ -102,10 +104,11 @@ public class ExampleHttpClient : LokiHttpClient
 ```csharp
 // Usage
 
+var credentials = new BasicAuthCredentials("http://localhost:3100", "<username>", "<password>");
 var log = new LoggerConfiguration()
         .MinimumLevel.Verbose()
         .Enrich.FromLogContext()
-        .WriteTo.LokiHttp("http://localhost:3100/api/prom/push", new LogLabelProvider(), new ExampleHttpClient())
+        .WriteTo.LokiHttp(credentials, new LogLabelProvider(), new ExampleHttpClient())
         .CreateLogger();
 ```
 
