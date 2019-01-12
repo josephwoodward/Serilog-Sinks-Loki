@@ -14,7 +14,7 @@ You can find more information about what Loki is over on [Grafana's website here
 
 - Formats and batches log entries to Loki via HTTP
 - Ability to provide global Loki log labels
-- Comes backed with an HTTP client, but your own can be provided
+- Comes baked with an HTTP client, but your own can be provided
 
 Coming soon:
 
