@@ -8,7 +8,7 @@ What is Loki?
 
 You can find more information about what Loki is over on [Grafana's website here](https://grafana.com/loki).
 
-![Loki Screenshot](https://raw.githubusercontent.com/JosephWoodward/Serilog-Sinks-Loki/master/assets/screenshot.png) 
+![Loki Screenshot](https://raw.githubusercontent.com/JosephWoodward/Serilog-Sinks-Loki/master/assets/screenshot2.png)
 
 ## Current Features:
 
