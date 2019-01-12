@@ -36,10 +36,12 @@ dotnet add package Serilog.Sinks.Loki
 ## Basic Example:
 
 ```csharp
+// var credentials = new BasicAuthCredentials("http://localhost:3100", "<username>", "<password>");
+var credentials = new NoAuthCredentials("http://localhost:3100");
 Log.Logger = new LoggerConfiguration()
         .MinimumLevel.Information()
         .Enrich.FromLogContext()
-        .WriteTo.LokiHttp("http://localhost:3100/api/prom/push")
+        .WriteTo.LokiHttp(credentials)
         .CreateLogger();
 
 var exception = new {Message = ex.Message, StackTrace = ex.StackTrace};
