@@ -37,8 +37,8 @@ dotnet add package Serilog.Sinks.Loki
 
 ```csharp
 // var credentials = new BasicAuthCredentials("http://localhost:3100", "<username>", "<password>");
-
 var credentials = new NoAuthCredentials("http://localhost:3100");
+
 Log.Logger = new LoggerConfiguration()
         .MinimumLevel.Information()
         .Enrich.FromLogContext()
