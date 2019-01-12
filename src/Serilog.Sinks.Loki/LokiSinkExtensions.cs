@@ -18,7 +18,7 @@ namespace Serilog.Sinks.Loki
             {
                 c.SetAuthCredentials(credentials);
             }
-            
+
             return sinkConfiguration.Http(LokiRouteBuilder.BuildPostUri(credentials.Url), batchFormatter: formatter, httpClient: client);
         }
     }

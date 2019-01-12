@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -13,9 +14,6 @@ namespace Serilog.Sinks.Loki
         public LokiHttpClient(HttpClient httpClient = null)
         {
             HttpClient = httpClient ?? new HttpClient();
-            HttpClient.DefaultRequestHeaders
-                .Accept
-                .Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
         public void SetAuthCredentials(LokiCredentials credentials)
@@ -24,16 +22,22 @@ namespace Serilog.Sinks.Loki
                 return;
 
             var headers = HttpClient.DefaultRequestHeaders;
-            if (headers.All(x => x.Key != "Authorization"))
-            {
-                var token = Base64Encode($"{c.Username}:{c.Password}");
-                headers.Add("Authorization", $"Basic {token}");
-            }
+            if (headers.Any(x => x.Key == "Authorization"))
+                return;
+
+            var token = Base64Encode($"{c.Username}:{c.Password}");
+            headers.Add("Authorization", $"Basic {token}");
         }
 
         public virtual Task<HttpResponseMessage> PostAsync(string requestUri, HttpContent content)
         {
+            content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
             return HttpClient.PostAsync(requestUri, content);
+            
+/*            var r = content.ReadAsStringAsync().Result;
+            var result = await HttpClient.PostAsync(requestUri, content);
+            var body = result.Content.ReadAsStringAsync().Result; //right!
+            return result;*/
         }
 
         public virtual void Dispose()
@@ -42,7 +46,7 @@ namespace Serilog.Sinks.Loki
         private static string Base64Encode(string plainText)
         {
             var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
-            return System.Convert.ToBase64String(plainTextBytes);
+            return Convert.ToBase64String(plainTextBytes);
         }
     }
 }
