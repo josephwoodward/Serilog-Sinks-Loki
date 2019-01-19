@@ -83,7 +83,13 @@ namespace Serilog.Sinks.Loki
                 };
 
                 if (logEvent.Exception != null)
+                {
+                    #if NETSTANDARD2_0 
                     e.Line += "\n\n" + logEvent.Exception.ToStringDemystified();
+                    #else
+                    e.Line += "\n\n" + logEvent.Exception.ToString();
+                    #endif
+                }
                 
                 var entry = JsonConvert.SerializeObject(e);
                 

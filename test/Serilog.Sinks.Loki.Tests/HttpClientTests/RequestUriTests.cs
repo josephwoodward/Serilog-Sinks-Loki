@@ -7,7 +7,6 @@ namespace Serilog.Sinks.Loki.Tests.HttpClientTests
     public class RequestUriTests
     {
         private readonly TestHttpClient _client;
-        private readonly NoAuthCredentials _credentials;
 
         public RequestUriTests()
         {
