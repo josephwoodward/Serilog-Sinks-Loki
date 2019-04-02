@@ -59,7 +59,7 @@ Log.CloseAndFlush();
 
 ### Adding global labels
 
-Loki indexes and groups log streams using labels, in Serilog.Sinks.Loki you can attach labels to all log entries by passing an implementation `ILogLabelProvider` to the `WriteTo.LokiHttp(..)` configuratino method. This is idea for labels such as instance IDs, environments and application names:
+Loki indexes and groups log streams using labels, in Serilog.Sinks.Loki you can attach labels to all log entries by passing an implementation `ILogLabelProvider` to the `WriteTo.LokiHttp(..)` configuration method. This is idea for labels such as instance IDs, environments and application names:
 
 ```csharp
 public class LogLabelProvider : ILogLabelProvider {
