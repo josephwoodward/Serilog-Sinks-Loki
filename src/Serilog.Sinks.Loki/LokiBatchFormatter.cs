@@ -50,9 +50,6 @@ namespace Serilog.Sinks.Loki
                 
                 var time = localTimeAndOffset.ToString("o");
                 
-                if (logEvent.Level == LogEventLevel.Error)
-                    Console.WriteLine("Ooops");
-                
                 // Labels
                 output.Write("\"labels\":\"{");
                 AddLabel(output, "level", logEvent.Level.ToString().ToLower());
