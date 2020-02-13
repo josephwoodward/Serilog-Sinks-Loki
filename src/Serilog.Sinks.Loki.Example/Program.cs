@@ -1,6 +1,7 @@
 ﻿using System;
 using Serilog.Context;
-using Serilog.Sinks.Http.BatchFormatters;
+using Serilog.Core;
+using System.Threading;
 
 namespace Serilog.Sinks.Loki.Example
 {
@@ -8,46 +9,43 @@ namespace Serilog.Sinks.Loki.Example
     {
         static void Main(string[] args)
         {
-            var r = new DefaultBatchFormatter();
+            NoAuthCredentials credentials = new NoAuthCredentials("http://localhost:3100");
+            Logger log = new LoggerConfiguration()
+                        .MinimumLevel.Verbose()
+                        .Enrich.FromLogContext()
+                        .Enrich.WithProperty("MyPropertyName","MyPropertyValue")
+                        .Enrich.WithThreadId()
+                        .WriteTo.Console()
+                        .WriteTo.LokiHttp(credentials, new LogLabelProvider(), new LokiExampleHttpClient())
+                        .CreateLogger();
             
-            Exception ex; 
+            log.Verbose("Verbose Text");
+
+            int total = 3;
+            for (int i = 1; i < total + 1; i++)
+            {
+                log.Debug("Processing item {ItemIndex} of {TotalItems}", i, total);
+                Thread.Sleep(1000);
+            }
+            
             try
             {
-                throw new Exception("Something went wrong, see StackTrace for more info");
+                string invalidCast = (string) new object();
             }
             catch (Exception e)
             {
-                ex = e;
+                log.Error(e, "Exception due to invalid cast");
             }
             
-            var credentials = new NoAuthCredentials("http://localhost:3100");
-            var log = new LoggerConfiguration()
-                    .MinimumLevel.Verbose()
-                    .Enrich.FromLogContext()
-                    .WriteTo.LokiHttp(credentials, new LogLabelProvider(), new LokiExampleHttpClient())
-                .CreateLogger();
-
+            var position = new { Latitude = 25, Longitude = 134 };
+            log.Information("3# Random message processed {@Position} in {Elapsed:000} ms.", position, 34);
             
             using (LogContext.PushProperty("A", 1))
             {
-                
-                
-            var position = new { Latitude = 25, Longitude = 134 };
-            var elapsedMs = 34;
-/*                log.Information("Carries property A = 1");*/
-                log.Information("3# Random message processed {@Position} in {Elapsed:000} ms.", position, elapsedMs);
+                log.Warning("Warning with Property A");
+                log.Fatal("Fatal with Property A");
             }
-            
-/*            log.Information("1# Logging {@Heartbeat:l} from {Computer:l}", "SomeValue", "SomeOtherValue");*/
 
-/*            var position = new { Latitude = 25, Longitude = 134 };
-            var exception = new {Message = ex.Message, StackTrace = ex.StackTrace};
-            var elapsedMs = 34;*/
-
-/*            log.Debug(@"Does this \""break\"" something?");
-            log.Error("#2 {@Message}", exception);
-            log.Information("3# Random message processed {@Position} in {Elapsed:000} ms.", position, elapsedMs);*/
-            
             log.Dispose();
         }
     }

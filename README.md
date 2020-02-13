@@ -15,10 +15,10 @@ You can find more information about what Loki is over on [Grafana's website here
 - Formats and batches log entries to Loki via HTTP
 - Ability to provide global Loki log labels
 - Comes baked with an HTTP client, but your own can be provided
+- Provides contextual log labels
 
 Coming soon:
 
-- Ability to provide contextual log labels
 - Write logs to disk in the correct format to send via Promtail
 - Send logs to Loki via HTTP using Snappy compression
 
