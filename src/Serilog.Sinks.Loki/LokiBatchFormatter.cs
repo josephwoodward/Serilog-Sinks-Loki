@@ -87,6 +87,9 @@ namespace Serilog.Sinks.Loki
             if (level == LogEventLevel.Information)
                 return "info";
 
+            if (level == LogEventLevel.Fatal)
+                return "critical";
+
             return level.ToString().ToLower();
         }
     }
