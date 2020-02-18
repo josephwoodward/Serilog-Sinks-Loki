@@ -1,5 +1,7 @@
 # Serilog.Sinks.Loki
 
+![.NET Core](https://github.com/JosephWoodward/Serilog-Sinks-Loki/workflows/.NET%20Core/badge.svg?branch=master)
+
 This is a Serilog Sink for Grafana's new [Loki Log Aggregator](https://grafana.com/loki).
 
 What is Loki?
