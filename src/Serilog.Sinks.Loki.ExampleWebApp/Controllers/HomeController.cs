@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Serilog.Sinks.Loki.ExampleWebApp.Models;
 
@@ -12,9 +9,8 @@ namespace Serilog.Sinks.Loki.ExampleWebApp.Controllers
     {
         public IActionResult Index()
         {
-            string res = null;
-            throw new ArgumentNullException(nameof(res));
-            return View();
+            string result;
+            throw new ArgumentNullException(nameof(result));
         }
 
         public IActionResult Privacy()

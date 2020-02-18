@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace Serilog.Sinks.Loki.ExampleWebApp
 {
@@ -32,11 +33,11 @@ namespace Serilog.Sinks.Loki.ExampleWebApp
             });
 
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -51,13 +52,12 @@ namespace Serilog.Sinks.Loki.ExampleWebApp
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseRouting();
             app.UseCookiePolicy();
 
-            app.UseMvc(routes =>
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
