@@ -27,7 +27,7 @@ namespace Serilog.Sinks.Loki.Example
                 log.Debug("Processing item {ItemIndex} of {TotalItems}", i, total);
                 Thread.Sleep(1000);
             }
-            
+
             try
             {
                 string invalidCast = (string) new object();
@@ -36,10 +36,10 @@ namespace Serilog.Sinks.Loki.Example
             {
                 log.Error(e, "Exception due to invalid cast");
             }
-            
+
             var position = new { Latitude = 25, Longitude = 134 };
             log.Information("3# Random message processed {@Position} in {Elapsed:000} ms.", position, 34);
-            
+
             using (LogContext.PushProperty("A", 1))
             {
                 log.Warning("Warning with Property A");

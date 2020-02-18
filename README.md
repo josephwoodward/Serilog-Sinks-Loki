@@ -88,7 +88,15 @@ var log = new LoggerConfiguration()
 
 ### Local, contextual labels
 
-In some occasions you'll want to add labels to your log stream within a particular class or method, this feature isn't quite finished yet but will be available soon.
+In some occasions you'll want to add context to your log stream within a particular class or method, this can be achieved using contextual labels:
+
+```csharp
+using (LogContext.PushProperty("A", 1))
+{
+    log.Warning("Warning with Property A");
+    log.Fatal("Fatal with Property A");
+}
+```
 
 ### Custom HTTP Client
 
