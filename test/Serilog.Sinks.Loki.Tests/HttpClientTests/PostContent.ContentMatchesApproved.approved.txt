@@ -1,1 +1,1 @@
-{"streams":[{"labels":"{level=\"error\"}","entries":[{"ts":"<datetime>","line":"Something's wrong"}]}]}
+{"streams":[{"labels":"{level=\"error\"}","entries":[{"ts":"<datetime>","line":"Something's wrong\n"}]}]}

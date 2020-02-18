@@ -24,7 +24,7 @@ namespace Serilog.Sinks.Loki
         {
             _globalLabels = globalLabels;
         }
-        
+
         public void Format(IEnumerable<LogEvent> logEvents, ITextFormatter formatter, TextWriter output)
         {
             if (logEvents == null)
@@ -36,10 +36,10 @@ namespace Serilog.Sinks.Loki
             if (!logs.Any())
                 return;
 
-            LokiContent content = new LokiContent();
+            var content = new LokiContent();
             foreach (LogEvent logEvent in logs)
             {
-                LokiContentStream stream = new LokiContentStream();
+                var stream = new LokiContentStream();
                 content.Streams.Add(stream);
 
                 stream.Labels.Add(new LokiLabel("level", GetLevel(logEvent.Level)));
@@ -52,16 +52,15 @@ namespace Serilog.Sinks.Loki
                     // To avoid this, remove all quotes from the value.
                     stream.Labels.Add(new LokiLabel(property.Key, property.Value.ToString().Replace("\"", "")));
 
-                DateTime localTime = DateTime.Now;
-                DateTimeOffset localTimeAndOffset =
-                    new DateTimeOffset(localTime, TimeZoneInfo.Local.GetUtcOffset(localTime));
-                string time = localTimeAndOffset.ToString("o");
+                var localTime = DateTime.Now;
+                var localTimeAndOffset = new DateTimeOffset(localTime, TimeZoneInfo.Local.GetUtcOffset(localTime));
+                var time = localTimeAndOffset.ToString("o");
 
-                StringBuilder sb = new StringBuilder();
+                var sb = new StringBuilder();
                 sb.AppendLine(logEvent.RenderMessage());
                 if (logEvent.Exception != null)
                 {
-                    Exception e = logEvent.Exception;
+                    var e = logEvent.Exception;
                     while (e != null)
                     {
                         sb.AppendLine(e.Message);

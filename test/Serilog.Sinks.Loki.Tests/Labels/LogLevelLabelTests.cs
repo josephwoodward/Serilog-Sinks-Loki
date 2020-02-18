@@ -50,7 +50,7 @@ namespace Serilog.Sinks.Loki.Tests.Labels
             
             // Assert
             var response = JsonConvert.DeserializeObject<TestResponse>(_client.Content);
-            response.Streams.First().Labels.ShouldBe("{level=\"information\"}");
+            response.Streams.First().Labels.ShouldBe("{level=\"info\"}");
         }
 
         [Fact]
