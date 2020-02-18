@@ -2,23 +2,36 @@
 
     <PropertyGroup>
         <TargetFrameworks>netstandard1.3;netstandard2.0</TargetFrameworks>
-        <VersionPrefix>1.0.1</VersionPrefix>
         <AssemblyName>Serilog.Sinks.Loki</AssemblyName>
         <PackageId>Serilog.Sinks.Loki</PackageId>
         <PackageTags>loki,serilog,sinks</PackageTags>
         <title>Serilog.Sinks.Loki</title>
-        <PackageReleaseNotes>https://github.com/JosephWoodward/Serilog-Sinks-Loki/releases/tag/1.0.0</PackageReleaseNotes>
+        <PackageReleaseNotes>https://github.com/JosephWoodward/Serilog-Sinks-Loki/releases/tag/v2.0.0</PackageReleaseNotes>
         <Authors>Joseph Woodward</Authors>
         <Description>A Serilog Sink for Grafana's Loki log aggregator</Description>
         <PackageProjectUrl>https://github.com/JosephWoodward/Serilog-Sinks-Loki</PackageProjectUrl>
-        <PackageIconUrl>https://raw.githubusercontent.com/JosephWoodward/Serilog-Sinks-Loki/master/assets/logo_128_128.png</PackageIconUrl>
         <PackageLicense>https://github.com/JosephWoodward/Serilog-Sinks-Loki/blob/master/LICENSE</PackageLicense>
+        <PackageIcon>logo_128_128.png</PackageIcon>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <MinVerVerbosity>diag</MinVerVerbosity>
+        <MinVerTagPrefix>v</MinVerTagPrefix>
+        <OutputType>Library</OutputType>
+        <MinVerSkip Condition="'$(Configuration)' == 'Debug'">true</MinVerSkip>
     </PropertyGroup>
-
     <ItemGroup>
-      <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-      <PackageReference Include="Serilog" Version="2.9.0" />
-      <PackageReference Include="Serilog.Sinks.Http" Version="5.2.1" />
+        <None Include="../../assets/logo_128_128.png" Pack="true" PackagePath="/" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+        <PackageReference Include="Serilog" Version="2.9.0" />
+        <PackageReference Include="Serilog.Sinks.Http" Version="5.2.1" />
+        <PackageReference Include="MinVer" Version="2.1.0">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+        </PackageReference>
     </ItemGroup>
 
 </Project>
