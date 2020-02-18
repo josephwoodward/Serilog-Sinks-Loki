@@ -1,17 +1,16 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using Newtonsoft.Json;
 using Serilog.Events;
 using Serilog.Formatting;
 using Serilog.Sinks.Http;
-using Serilog.Sinks.Http.BatchFormatters;
 using Serilog.Sinks.Loki.Labels;
 
 namespace Serilog.Sinks.Loki
 {
+    using System.Text;
+
     internal class LokiBatchFormatter : IBatchFormatter 
     {
         private readonly IList<LokiLabel> _globalLabels;
@@ -32,72 +31,50 @@ namespace Serilog.Sinks.Loki
                 throw new ArgumentNullException(nameof(logEvents));
             if (output == null)
                 throw new ArgumentNullException(nameof(output));
-            
-            var logs = logEvents.ToList();
+
+            List<LogEvent> logs = logEvents.ToList();
             if (!logs.Any())
                 return;
 
-            var count = 0;
-            
-            output.Write("{\"streams\":[");
-            foreach (var logEvent in logs)
+            LokiContent content = new LokiContent();
+            foreach (LogEvent logEvent in logs)
             {
-                count++;
-                output.Write("{");
-                
-                var localTime = DateTime.Now;
-                var localTimeAndOffset = new DateTimeOffset(localTime, TimeZoneInfo.Local.GetUtcOffset(localTime));
-                
-                var time = localTimeAndOffset.ToString("o");
-                
-                // Labels
-                output.Write("\"labels\":\"{");
-                AddLabel(output, "level", logEvent.Level.ToString().ToLower());
-                
-                foreach (var label in _globalLabels)
-                {
-                    output.Write(",");
-                    AddLabel(output, label.Key, label.Value);
-                        
-                }
-                
-                output.Write("}\",");
-                output.Write("\"entries\":[");
+                LokiContentStream stream = new LokiContentStream();
+                content.Streams.Add(stream);
 
-                if (logEvent.Properties.Any())
-                {
-                    foreach (var eventProperty in logEvent.Properties)
-                    {
-/*                        output.Write(",");
-                        AddEventPropertyAsLabel(output, eventProperty.Key, eventProperty.Value);*/
-                    } 
-                }
+                stream.Labels.Add(new LokiLabel("level", GetLevel(logEvent.Level)));
+                foreach (LokiLabel globalLabel in _globalLabels)
+                    stream.Labels.Add(new LokiLabel(globalLabel.Key, globalLabel.Value));
 
-                var e = new LokiEntry
-                {
-                    Ts = time,
-                    Line = logEvent.RenderMessage()
-                };
+                foreach (KeyValuePair<string, LogEventPropertyValue> property in logEvent.Properties)
+                    // Some enrichers pass strings with quotes surrounding the values inside the string,
+                    // which results in redundant quotes after serialization and a "bad request" response.
+                    // To avoid this, remove all quotes from the value.
+                    stream.Labels.Add(new LokiLabel(property.Key, property.Value.ToString().Replace("\"", "")));
 
+                DateTime localTime = DateTime.Now;
+                DateTimeOffset localTimeAndOffset =
+                    new DateTimeOffset(localTime, TimeZoneInfo.Local.GetUtcOffset(localTime));
+                string time = localTimeAndOffset.ToString("o");
+
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine(logEvent.RenderMessage());
                 if (logEvent.Exception != null)
                 {
-                    #if NETSTANDARD2_0 
-                    e.Line += "\n\n" + logEvent.Exception.ToStringDemystified();
-                    #else
-                    e.Line += "\n\n" + logEvent.Exception.ToString();
-                    #endif
+                    Exception e = logEvent.Exception;
+                    while (e != null)
+                    {
+                        sb.AppendLine(e.Message);
+                        sb.AppendLine(e.StackTrace);
+                        e = e.InnerException;
+                    }
                 }
-                
-                var entry = JsonConvert.SerializeObject(e);
-                
-                output.Write(entry);
-                
-                output.Write("]}");
-                if (count < logs.Count)
-                    output.Write(",");
+
+                stream.Entries.Add(new LokiEntry(time, sb.ToString()));
             }
-            
-            output.WriteLine("]}");
+
+            if (content.Streams.Count > 0)
+                output.Write(content.Serialize());
         }
 
         public void Format(IEnumerable<string> logEvents, TextWriter output)
@@ -105,29 +82,12 @@ namespace Serilog.Sinks.Loki
             throw new NotImplementedException();
         }
 
-        private static void AddEventPropertyAsLabel(TextWriter output, string eventPropertyKey, LogEventPropertyValue eventPropertyValue)
-        {
-            output.Write(eventPropertyKey);
-            output.Write("=\\\"");
-            output.Write(eventPropertyValue.ToString());
-            output.Write("\\\"");
-        }
-
-        private static void AddLabel(TextWriter output, string key, string value)
-        {
-            output.Write(key);
-            output.Write("=\\\"");
-            output.Write(value);
-            output.Write("\\\"");
-        }
-
         private static string GetLevel(LogEventLevel level)
         {
             if (level == LogEventLevel.Information)
                 return "info";
 
-            var r = level.ToString().ToLower();
-            return r;
+            return level.ToString().ToLower();
         }
     }
 }
