@@ -21,5 +21,11 @@ namespace Serilog.Sinks.Loki
 
             return sinkConfiguration.Http(LokiRouteBuilder.BuildPostUri(credentials.Url), batchFormatter: formatter, httpClient: client);
         }
+
+        public static LoggerConfiguration LokiHttp(this LoggerSinkConfiguration sinkConfiguration, string serverUrl)
+            => sinkConfiguration.LokiHttp(new NoAuthCredentials(serverUrl));
+
+        public static LoggerConfiguration LokiHttp(this LoggerSinkConfiguration sinkConfiguration, string serverUrl, string username, string password)
+            => sinkConfiguration.LokiHttp(new BasicAuthCredentials(serverUrl, username, password));
     }
 }
