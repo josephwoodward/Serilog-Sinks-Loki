@@ -50,7 +50,8 @@ namespace Serilog.Sinks.Loki
                     // Some enrichers pass strings with quotes surrounding the values inside the string,
                     // which results in redundant quotes after serialization and a "bad request" response.
                     // To avoid this, remove all quotes from the value.
-                    stream.Labels.Add(new LokiLabel(property.Key, property.Value.ToString().Replace("\"", "")));
+                    // We also remove any \r\n newlines and replace with \n new lines to prevent "bad request" responses
+                    stream.Labels.Add(new LokiLabel(property.Key, property.Value.ToString().Replace("\"", "").Replace("\r\n", "\n")));
 
                 var localTime = DateTime.Now;
                 var localTimeAndOffset = new DateTimeOffset(localTime, TimeZoneInfo.Local.GetUtcOffset(localTime));
@@ -69,7 +70,9 @@ namespace Serilog.Sinks.Loki
                     }
                 }
 
-                stream.Entries.Add(new LokiEntry(time, sb.ToString()));
+                // Loki doesn't like \r\n for new line, and we can't guarantee the message doesn't have any
+                // in it, so we replace \r\n with \n on the final message
+                stream.Entries.Add(new LokiEntry(time, sb.ToString().Replace("\r\n", "\n")));
             }
 
             if (content.Streams.Count > 0)
