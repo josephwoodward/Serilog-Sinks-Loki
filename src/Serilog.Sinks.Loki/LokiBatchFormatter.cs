@@ -73,6 +73,7 @@ namespace Serilog.Sinks.Loki
 
                 // Loki doesn't like \r\n for new line, and we can't guarantee the message doesn't have any
                 // in it, so we replace \r\n with \n on the final message
+                // We also flip backslashes to forward slashes, Loki doesn't like those either.
                 stream.Entries.Add(new LokiEntry(time, sb.ToString().Replace("\\", "/").Replace("\r\n", "\n")));
             }
 
