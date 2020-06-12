@@ -11,18 +11,23 @@ namespace Serilog.Sinks.Loki
 {
     using System.Text;
 
-    internal class LokiBatchFormatter : IBatchFormatter 
+    internal class LokiBatchFormatter : IBatchFormatter
     {
-        private readonly IList<LokiLabel> _globalLabels;
+        public IList<LokiLabel> GlobalLabels { get; set; }
+        public IList<string> PropertiesAsLabels { get; set; }
 
-        public LokiBatchFormatter()
-        {
-            _globalLabels = new List<LokiLabel>();
-        }
+        public IList<string> PropertiesToAppend { get; set; }
 
+        public LokiFormatterStrategy FormatterStrategy { get; set; } = LokiFormatterStrategy.AllPropertiesAsLabels;
+
+        public LokiBatchFormatter() {}
+
+        [Obsolete("Assign to LokiBathFormatter.GlobalLabels instead.")]
         public LokiBatchFormatter(IList<LokiLabel> globalLabels)
         {
-            _globalLabels = globalLabels;
+            this.GlobalLabels = globalLabels?.ToList() ?? new List<LokiLabel>();
+            this.PropertiesAsLabels = new List<string>();
+            this.PropertiesToAppend = new List<string>();
         }
 
         public void Format(IEnumerable<LogEvent> logEvents, ITextFormatter formatter, TextWriter output)
@@ -43,16 +48,8 @@ namespace Serilog.Sinks.Loki
                 content.Streams.Add(stream);
 
                 stream.Labels.Add(new LokiLabel("level", GetLevel(logEvent.Level)));
-                foreach (LokiLabel globalLabel in _globalLabels)
+                foreach (LokiLabel globalLabel in GlobalLabels)
                     stream.Labels.Add(new LokiLabel(globalLabel.Key, globalLabel.Value));
-
-                foreach (KeyValuePair<string, LogEventPropertyValue> property in logEvent.Properties)
-                    // Some enrichers pass strings with quotes surrounding the values inside the string,
-                    // which results in redundant quotes after serialization and a "bad request" response.
-                    // To avoid this, remove all quotes from the value.
-                    // We also remove any \r\n newlines and replace with \n new lines to prevent "bad request" responses
-                    // We also remove backslashes and replace with forward slashes, Loki doesn't like those either
-                    stream.Labels.Add(new LokiLabel(property.Key, property.Value.ToString().Replace("\"", "").Replace("\r\n", "\n").Replace("\\", "/")));
 
                 var localTime = DateTime.Now;
                 var localTimeAndOffset = new DateTimeOffset(localTime, TimeZoneInfo.Local.GetUtcOffset(localTime));
@@ -68,6 +65,28 @@ namespace Serilog.Sinks.Loki
                         sb.AppendLine(e.Message);
                         sb.AppendLine(e.StackTrace);
                         e = e.InnerException;
+                    }
+                }
+
+                foreach (KeyValuePair<string, LogEventPropertyValue> property in logEvent.Properties)
+                {
+                    // Some enrichers pass strings with quotes surrounding the values inside the string,
+                    // which results in redundant quotes after serialization and a "bad request" response.
+                    // To avoid this, remove all quotes from the value.
+                    // We also remove any \r\n newlines and replace with \n new lines to prevent "bad request" responses
+                    // We also remove backslashes and replace with forward slashes, Loki doesn't like those either
+                    var propertyValue = property.Value.ToString().Replace("\"", "").Replace("\r\n", "\n").Replace("\\", "/");
+
+                    switch (DetermineHandleActionForProperty(property.Key))
+                    {
+                        case HandleAction.Discard:
+                            continue;
+                        case HandleAction.SendAsLabel:
+                            stream.Labels.Add(new LokiLabel(property.Key, propertyValue));
+                            break;
+                        case HandleAction.AppendToMessage:
+                            sb.Append($" {property.Key}={propertyValue}");
+                            break;
                     }
                 }
 
@@ -93,5 +112,40 @@ namespace Serilog.Sinks.Loki
 
             return level.ToString().ToLower();
         }
+
+        private HandleAction DetermineHandleActionForProperty(string propertyName)
+        {
+            if (this.FormatterStrategy == LokiFormatterStrategy.AllPropertiesAsLabels)
+            {
+                return HandleAction.SendAsLabel;
+            }
+
+            if (this.FormatterStrategy == LokiFormatterStrategy.SpecificPropertiesAsLabelsAndRestDiscarded)
+            {
+                return this.PropertiesAsLabels.Contains(propertyName)
+                ? HandleAction.SendAsLabel
+                : HandleAction.Discard;
+            }
+
+            if (this.FormatterStrategy == LokiFormatterStrategy.SpecificPropertiesAsLabelsAndRestAppended)
+            {
+                return this.PropertiesAsLabels.Contains(propertyName)
+                ? HandleAction.SendAsLabel
+                : HandleAction.AppendToMessage;
+            }
+
+            // last case: this.FormatterStrategy == LokiFormatterStrategy.SpecificPropertiesAsLabelsOrAppended)
+            return this.PropertiesAsLabels.Contains(propertyName)
+            ? HandleAction.SendAsLabel
+            : (this.PropertiesToAppend.Contains(propertyName) ? HandleAction.AppendToMessage : HandleAction.Discard);
+        }
+
+        private enum HandleAction
+        {
+            Discard,
+            SendAsLabel,
+            AppendToMessage
+        }
+
     }
 }
