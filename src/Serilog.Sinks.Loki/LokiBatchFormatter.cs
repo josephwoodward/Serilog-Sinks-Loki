@@ -54,9 +54,7 @@ namespace Serilog.Sinks.Loki
                     // We also remove backslashes and replace with forward slashes, Loki doesn't like those either
                     stream.Labels.Add(new LokiLabel(property.Key, property.Value.ToString().Replace("\"", "").Replace("\r\n", "\n").Replace("\\", "/")));
 
-                var localTime = DateTime.Now;
-                var localTimeAndOffset = new DateTimeOffset(localTime, TimeZoneInfo.Local.GetUtcOffset(localTime));
-                var time = localTimeAndOffset.ToString("o");
+                var time = logEvent.Timestamp.ToString("o");
 
                 var sb = new StringBuilder();
                 sb.AppendLine(logEvent.RenderMessage());
