@@ -55,6 +55,16 @@ namespace Serilog.Sinks.Loki
                 var localTimeAndOffset = new DateTimeOffset(localTime, TimeZoneInfo.Local.GetUtcOffset(localTime));
                 var time = localTimeAndOffset.ToString("o");
 
+                foreach (KeyValuePair<string, LogEventPropertyValue> property in logEvent.Properties)
+                    // Some enrichers pass strings with quotes surrounding the values inside the string,
+                    // which results in redundant quotes after serialization and a "bad request" response.
+                    // To avoid this, remove all quotes from the value.
+                    // We also remove any \r\n newlines and replace with \n new lines to prevent "bad request" responses
+                    // We also remove backslashes and replace with forward slashes, Loki doesn't like those either
+                    stream.Labels.Add(new LokiLabel(property.Key, property.Value.ToString().Replace("\"", "").Replace("\r\n", "\n").Replace("\\", "/")));
+
+
+
                 var sb = new StringBuilder();
                 sb.AppendLine(logEvent.RenderMessage());
                 if (logEvent.Exception != null)
