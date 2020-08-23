@@ -13,5 +13,7 @@ namespace Serilog.Sinks.Loki.Example
                 new LokiLabel("namespace", "prod")
             };
         }
+
+        public bool PropertiesAsLabels { get; set; } = false;
     }
 }
