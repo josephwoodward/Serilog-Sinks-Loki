@@ -86,10 +86,13 @@ namespace Serilog.Sinks.Loki
 
         private static string GetLevel(LogEventLevel level)
         {
-            if (level == LogEventLevel.Information)
-                return "info";
-
-            return level.ToString().ToLower();
+            switch (level)
+            {
+                case LogEventLevel.Verbose: return "trace";
+                case LogEventLevel.Information: return "info";
+                case LogEventLevel.Fatal: return "critical";
+                default: return level.ToString().ToLower();
+            }
         }
     }
 }

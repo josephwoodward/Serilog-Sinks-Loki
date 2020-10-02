@@ -18,6 +18,24 @@ namespace Serilog.Sinks.Loki.Tests.Labels
         }
         
         [Fact]
+        public void VerboseLabelIsSet()
+        {
+            // Arrange
+            var log = new LoggerConfiguration()
+                .MinimumLevel.Verbose()
+                .WriteTo.LokiHttp(_credentials, httpClient: _client)
+                .CreateLogger();
+            
+            // Act
+            log.Verbose("Verbose Level");
+            log.Dispose();
+            
+            // Assert
+            var response = JsonConvert.DeserializeObject<TestResponse>(_client.Content);
+            response.Streams.First().Labels.ShouldBe("{level=\"trace\"}");
+        }
+        
+        [Fact]
         public void DebugLabelIsSet()
         {
             // Arrange
@@ -69,6 +87,24 @@ namespace Serilog.Sinks.Loki.Tests.Labels
             // Assert
             var response = JsonConvert.DeserializeObject<TestResponse>(_client.Content);
             response.Streams.First().Labels.ShouldBe("{level=\"error\"}");
+        }
+
+        [Fact]
+        public void FatalLabelIsSet()
+        {
+            // Arrange
+            var log = new LoggerConfiguration()
+                .MinimumLevel.Fatal()
+                .WriteTo.LokiHttp(_credentials, httpClient: _client)
+                .CreateLogger();
+            
+            // Act
+            log.Fatal("Fatal Level");
+            log.Dispose();
+            
+            // Assert
+            var response = JsonConvert.DeserializeObject<TestResponse>(_client.Content);
+            response.Streams.First().Labels.ShouldBe("{level=\"critical\"}");
         }
     }
 }
