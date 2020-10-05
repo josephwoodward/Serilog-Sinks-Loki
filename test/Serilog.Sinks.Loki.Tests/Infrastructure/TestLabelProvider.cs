@@ -13,6 +13,6 @@ namespace Serilog.Sinks.Loki.Tests.Infrastructure
             };
         }
 
-        public bool PropertiesAsLabels { get; set; } = false;
+        public IList<string> PropertiesAsLabels { get; set; } = new List<string>();
     }
 }

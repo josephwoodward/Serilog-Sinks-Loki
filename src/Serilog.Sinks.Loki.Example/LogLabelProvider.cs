@@ -14,6 +14,9 @@ namespace Serilog.Sinks.Loki.Example
             };
         }
 
-        public bool PropertiesAsLabels { get; set; } = false;
+        public IList<string> PropertiesAsLabels { get; set; } = new List<string>
+        {
+            "MyPropertyName"
+        };
     }
 }

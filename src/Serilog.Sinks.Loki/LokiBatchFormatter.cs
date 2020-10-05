@@ -14,7 +14,7 @@ namespace Serilog.Sinks.Loki
     internal class LokiBatchFormatter : IBatchFormatter 
     {
         private readonly IList<LokiLabel> _globalLabels;
-        private readonly bool _propertiesAsLabels;
+        private readonly IList<string> _propertiesAsLabels;
 
         public LokiBatchFormatter()
         {
@@ -71,7 +71,7 @@ namespace Serilog.Sinks.Loki
                     // We also remove any \r\n newlines and replace with \n new lines to prevent "bad request" responses
                     // We also remove backslashes and replace with forward slashes, Loki doesn't like those either
                     var propertyValue = property.Value.ToString().Replace("\"", "").Replace("\r\n", "\n").Replace("\\", "/");
-                    if (_propertiesAsLabels)
+                    if (_propertiesAsLabels.Contains(property.Key, StringComparer.OrdinalIgnoreCase))
                     {
                         stream.Labels.Add(new LokiLabel(property.Key, propertyValue));
                     }

@@ -9,6 +9,6 @@ namespace Serilog.Sinks.Loki.Labels
             return new List<LokiLabel>();
         }
 
-        public bool PropertiesAsLabels { get; set; } = true;
+        public IList<string> PropertiesAsLabels { get; set; } = new List<string>();
     }
 }
