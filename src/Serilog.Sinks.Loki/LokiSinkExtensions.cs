@@ -13,7 +13,7 @@ namespace Serilog.Sinks.Loki
         {
             var formatter = logLabelProvider != null ? new LokiBatchFormatter(logLabelProvider.GetLabels()) : new LokiBatchFormatter();
             
-            var client = httpClient ?? new LokiHttpClient();
+            var client = httpClient ?? new DefaultLokiHttpClient();
             if (client is LokiHttpClient c)
             {
                 c.SetAuthCredentials(credentials);
