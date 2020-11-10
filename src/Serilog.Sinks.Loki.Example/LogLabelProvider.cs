@@ -13,5 +13,10 @@ namespace Serilog.Sinks.Loki.Example
                 new LokiLabel("namespace", "prod")
             };
         }
+
+        public IList<string> PropertiesAsLabels { get; set; } = new List<string>
+        {
+            "MyPropertyName"
+        };
     }
 }

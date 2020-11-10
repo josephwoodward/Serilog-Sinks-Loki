@@ -14,15 +14,17 @@ namespace Serilog.Sinks.Loki
     internal class LokiBatchFormatter : IBatchFormatter 
     {
         private readonly IList<LokiLabel> _globalLabels;
+        private readonly IList<string> _propertiesAsLabels;
 
         public LokiBatchFormatter()
         {
             _globalLabels = new List<LokiLabel>();
         }
 
-        public LokiBatchFormatter(IList<LokiLabel> globalLabels)
+        public LokiBatchFormatter(ILogLabelProvider logLabelProvider)
         {
-            _globalLabels = globalLabels;
+            _globalLabels = logLabelProvider.GetLabels();
+            _propertiesAsLabels = logLabelProvider.PropertiesAsLabels;
         }
 
         public void Format(IEnumerable<LogEvent> logEvents, ITextFormatter formatter, TextWriter output)
@@ -46,14 +48,6 @@ namespace Serilog.Sinks.Loki
                 foreach (LokiLabel globalLabel in _globalLabels)
                     stream.Labels.Add(new LokiLabel(globalLabel.Key, globalLabel.Value));
 
-                foreach (KeyValuePair<string, LogEventPropertyValue> property in logEvent.Properties)
-                    // Some enrichers pass strings with quotes surrounding the values inside the string,
-                    // which results in redundant quotes after serialization and a "bad request" response.
-                    // To avoid this, remove all quotes from the value.
-                    // We also remove any \r\n newlines and replace with \n new lines to prevent "bad request" responses
-                    // We also remove backslashes and replace with forward slashes, Loki doesn't like those either
-                    stream.Labels.Add(new LokiLabel(property.Key, property.Value.ToString().Replace("\"", "").Replace("\r\n", "\n").Replace("\\", "/")));
-
                 var time = logEvent.Timestamp.ToString("o");
 
                 var sb = new StringBuilder();
@@ -66,6 +60,24 @@ namespace Serilog.Sinks.Loki
                         sb.AppendLine(e.Message);
                         sb.AppendLine(e.StackTrace);
                         e = e.InnerException;
+                    }
+                }
+
+                foreach (KeyValuePair<string, LogEventPropertyValue> property in logEvent.Properties)
+                {
+                    // Some enrichers pass strings with quotes surrounding the values inside the string,
+                    // which results in redundant quotes after serialization and a "bad request" response.
+                    // To avoid this, remove all quotes from the value.
+                    // We also remove any \r\n newlines and replace with \n new lines to prevent "bad request" responses
+                    // We also remove backslashes and replace with forward slashes, Loki doesn't like those either
+                    var propertyValue = property.Value.ToString().Replace("\"", "").Replace("\r\n", "\n").Replace("\\", "/");
+                    if (_propertiesAsLabels.Contains(property.Key, StringComparer.OrdinalIgnoreCase))
+                    {
+                        stream.Labels.Add(new LokiLabel(property.Key, propertyValue));
+                    }
+                    else
+                    {
+                        sb.Append($" {property.Key}={propertyValue}");
                     }
                 }
 

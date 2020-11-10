@@ -12,5 +12,7 @@ namespace Serilog.Sinks.Loki.Tests.Infrastructure
                 new LokiLabel("app", "tests")
             };
         }
+
+        public IList<string> PropertiesAsLabels { get; set; } = new List<string>();
     }
 }

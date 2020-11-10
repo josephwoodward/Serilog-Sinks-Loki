@@ -11,7 +11,7 @@ namespace Serilog.Sinks.Loki
         
         private static LoggerConfiguration LokiHttpImpl(this LoggerSinkConfiguration sinkConfiguration, LokiCredentials credentials, ILogLabelProvider logLabelProvider, IHttpClient httpClient)
         {
-            var formatter = logLabelProvider != null ? new LokiBatchFormatter(logLabelProvider.GetLabels()) : new LokiBatchFormatter();
+            var formatter = new LokiBatchFormatter(logLabelProvider ?? new DefaultLogLabelProvider());
             
             var client = httpClient ?? new DefaultLokiHttpClient();
             if (client is LokiHttpClient c)
