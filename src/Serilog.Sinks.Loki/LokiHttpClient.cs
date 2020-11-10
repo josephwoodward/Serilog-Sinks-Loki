@@ -7,7 +7,7 @@ using Serilog.Sinks.Http;
 
 namespace Serilog.Sinks.Loki
 {
-    public class LokiHttpClient : IHttpClient
+    public abstract class LokiHttpClient : IHttpClient
     {
         protected readonly HttpClient HttpClient;
 
