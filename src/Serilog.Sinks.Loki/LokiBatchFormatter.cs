@@ -53,15 +53,8 @@ namespace Serilog.Sinks.Loki
                 var sb = new StringBuilder();
                 sb.AppendLine(logEvent.RenderMessage());
                 if (logEvent.Exception != null)
-                {
-                    var e = logEvent.Exception;
-                    while (e != null)
-                    {
-                        sb.AppendLine(e.Message);
-                        sb.AppendLine(e.StackTrace);
-                        e = e.InnerException;
-                    }
-                }
+                    // AggregateException adds a Environment.Newline to the end of ToString(), so we trim it off
+                    sb.AppendLine(logEvent.Exception.ToString().TrimEnd());
 
                 foreach (KeyValuePair<string, LogEventPropertyValue> property in logEvent.Properties)
                 {
