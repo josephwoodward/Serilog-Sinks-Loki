@@ -13,7 +13,7 @@ namespace Serilog.Sinks.Loki.Example
             Logger log = new LoggerConfiguration()
                         .MinimumLevel.Verbose()
                         .Enrich.FromLogContext()
-                        .Enrich.WithProperty("MyPropertyName","MyPropertyValue")
+                        .Enrich.WithProperty("MyLabelPropertyName","MyPropertyValue")
                         .Enrich.WithThreadId()
                         .WriteTo.Console()
                         .WriteTo.LokiHttp(credentials, new LogLabelProvider(), new LokiExampleHttpClient())
@@ -44,6 +44,12 @@ namespace Serilog.Sinks.Loki.Example
             {
                 log.Warning("Warning with Property A");
                 log.Fatal("Fatal with Property A");
+            }
+
+            using (LogContext.PushProperty("MyAppendPropertyName", 1))
+            {
+                log.Warning("Warning with Property MyAppendPropertyName");
+                log.Fatal("Fatal with Property MyAppendPropertyName");
             }
 
             log.Dispose();
