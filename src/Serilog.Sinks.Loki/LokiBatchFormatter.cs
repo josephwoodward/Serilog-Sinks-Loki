@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Serilog.Events;
 using Serilog.Formatting;
+using Serilog.Parsing;
 using Serilog.Sinks.Http;
 using Serilog.Sinks.Loki.Labels;
 
@@ -11,21 +12,45 @@ namespace Serilog.Sinks.Loki
 {
     using System.Text;
 
-    internal class LokiBatchFormatter : IBatchFormatter 
+    internal class LokiBatchFormatter : IBatchFormatter
     {
-        private readonly IList<LokiLabel> _globalLabels;
-        private readonly IList<string> _propertiesAsLabels;
+        public ILogLabelProvider LogLabelProvider { get; }
 
         public LokiBatchFormatter()
         {
-            _globalLabels = new List<LokiLabel>();
+            this.LogLabelProvider = new DefaultLogLabelProvider();
         }
 
         public LokiBatchFormatter(ILogLabelProvider logLabelProvider)
         {
-            _globalLabels = logLabelProvider.GetLabels();
-            _propertiesAsLabels = logLabelProvider.PropertiesAsLabels;
+            this.LogLabelProvider = logLabelProvider;
         }
+
+        [Obsolete("Assign to LokiBatchFormatter.GlobalLabels instead.")]
+        public LokiBatchFormatter(IList<LokiLabel> globalLabels)
+        {
+            this.LogLabelProvider = new DefaultLogLabelProvider(globalLabels);
+        }
+
+        // This avoids additional quoting as described in https://github.com/serilog/serilog/issues/936
+        private static void RenderMessage(TextWriter tw, LogEvent logEvent)
+        {
+            bool IsString(LogEventPropertyValue pv)
+            {
+                return pv is ScalarValue sv && sv.Value is string;
+            }
+
+            foreach(var t in logEvent.MessageTemplate.Tokens)
+            {
+                if (t is PropertyToken pt &&
+                    logEvent.Properties.TryGetValue(pt.PropertyName, out var propVal) &&
+                    IsString(propVal))
+                    tw.Write(((ScalarValue)propVal).Value);
+                else
+                    t.Render(logEvent.Properties, tw);
+            }
+            tw.Write('\n');
+        }   
 
         public void Format(IEnumerable<LogEvent> logEvents, ITextFormatter formatter, TextWriter output)
         {
@@ -45,13 +70,15 @@ namespace Serilog.Sinks.Loki
                 content.Streams.Add(stream);
 
                 stream.Labels.Add(new LokiLabel("level", GetLevel(logEvent.Level)));
-                foreach (LokiLabel globalLabel in _globalLabels)
+                foreach (LokiLabel globalLabel in this.LogLabelProvider.GetLabels())
                     stream.Labels.Add(new LokiLabel(globalLabel.Key, globalLabel.Value));
 
                 var time = logEvent.Timestamp.ToString("o");
-
                 var sb = new StringBuilder();
-                sb.AppendLine(logEvent.RenderMessage());
+                using (var tw = new StringWriter(sb))
+                {
+                    RenderMessage(tw, logEvent);
+                }
                 if (logEvent.Exception != null)
                     // AggregateException adds a Environment.Newline to the end of ToString(), so we trim it off
                     sb.AppendLine(logEvent.Exception.ToString().TrimEnd());
@@ -63,21 +90,25 @@ namespace Serilog.Sinks.Loki
                     // To avoid this, remove all quotes from the value.
                     // We also remove any \r\n newlines and replace with \n new lines to prevent "bad request" responses
                     // We also remove backslashes and replace with forward slashes, Loki doesn't like those either
-                    var propertyValue = property.Value.ToString().Replace("\"", "").Replace("\r\n", "\n").Replace("\\", "/");
-                    if (_propertiesAsLabels.Contains(property.Key, StringComparer.OrdinalIgnoreCase))
+                    var propertyValue = property.Value.ToString().Replace("\r\n", "\n");
+
+                    switch (DetermineHandleActionForProperty(property.Key))
                     {
-                        stream.Labels.Add(new LokiLabel(property.Key, propertyValue));
-                    }
-                    else
-                    {
-                        sb.Append($" {property.Key}={propertyValue}");
+                        case HandleAction.Discard:
+                            continue;
+                        case HandleAction.SendAsLabel:
+                            propertyValue = propertyValue.Replace("\"", "").Replace("\\", "/");
+                            stream.Labels.Add(new LokiLabel(property.Key, propertyValue));
+                            break;
+                        case HandleAction.AppendToMessage:
+                            sb.Append($" {property.Key}={propertyValue}");
+                            break;
                     }
                 }
 
                 // Loki doesn't like \r\n for new line, and we can't guarantee the message doesn't have any
                 // in it, so we replace \r\n with \n on the final message
-                // We also flip backslashes to forward slashes, Loki doesn't like those either.
-                stream.Entries.Add(new LokiEntry(time, sb.ToString().Replace("\\", "/").Replace("\r\n", "\n")));
+                stream.Entries.Add(new LokiEntry(time, sb.ToString().Replace("\r\n", "\n")));
             }
 
             if (content.Streams.Count > 0)
@@ -98,6 +129,41 @@ namespace Serilog.Sinks.Loki
                 case LogEventLevel.Fatal: return "critical";
                 default: return level.ToString().ToLower();
             }
+        }
+
+        private HandleAction DetermineHandleActionForProperty(string propertyName)
+        {
+            var provider = this.LogLabelProvider;
+            switch (provider.FormatterStrategy)
+            {
+                case LokiFormatterStrategy.AllPropertiesAsLabels:
+                    return HandleAction.SendAsLabel;
+
+                case LokiFormatterStrategy.SpecificPropertiesAsLabelsAndRestDiscarded:
+                    return provider.PropertiesAsLabels.Contains(propertyName)
+                        ? HandleAction.SendAsLabel
+                        : HandleAction.Discard;
+
+                case LokiFormatterStrategy.SpecificPropertiesAsLabelsAndRestAppended:
+                    return provider.PropertiesAsLabels.Contains(propertyName)
+                        ? HandleAction.SendAsLabel
+                        : HandleAction.AppendToMessage;
+
+                //case LokiFormatterStrategy.SpecificPropertiesAsLabelsOrAppended:
+                default:
+                    return provider.PropertiesAsLabels.Contains(propertyName)
+                        ? HandleAction.SendAsLabel
+                        : provider.PropertiesToAppend.Contains(propertyName)
+                            ? HandleAction.AppendToMessage
+                            : HandleAction.Discard;
+            }
+        }
+
+        private enum HandleAction
+        {
+            Discard,
+            SendAsLabel,
+            AppendToMessage
         }
     }
 }

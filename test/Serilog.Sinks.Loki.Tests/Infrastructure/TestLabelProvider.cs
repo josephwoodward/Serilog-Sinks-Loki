@@ -14,5 +14,7 @@ namespace Serilog.Sinks.Loki.Tests.Infrastructure
         }
 
         public IList<string> PropertiesAsLabels { get; set; } = new List<string>();
+        public IList<string> PropertiesToAppend { get; set; } = new List<string>();
+        public LokiFormatterStrategy FormatterStrategy { get; set; } = LokiFormatterStrategy.SpecificPropertiesAsLabelsAndRestAppended;
     }
 }
