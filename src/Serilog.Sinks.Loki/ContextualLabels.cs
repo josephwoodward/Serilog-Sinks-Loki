@@ -1,5 +1,3 @@
-using Serilog.Core;
-
 namespace Serilog.Sinks.Loki
 {
 /*    public static class ContextualLabels
