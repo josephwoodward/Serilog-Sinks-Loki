@@ -1,6 +1,4 @@
 using System;
-using JustEat.HttpClientInterception;
-using Xunit;
 
 namespace Serilog.Sinks.Loki.Tests
 {

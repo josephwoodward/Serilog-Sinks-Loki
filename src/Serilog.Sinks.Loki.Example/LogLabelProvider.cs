@@ -16,7 +16,12 @@ namespace Serilog.Sinks.Loki.Example
 
         public IList<string> PropertiesAsLabels { get; set; } = new List<string>
         {
-            "MyPropertyName"
+            "MyLabelPropertyName"
         };
+        public IList<string> PropertiesToAppend { get; set; } = new List<string>
+        {
+            "MyAppendPropertyName"
+        };
+        public LokiFormatterStrategy FormatterStrategy { get; set; } = LokiFormatterStrategy.SpecificPropertiesAsLabelsOrAppended;
     }
 }

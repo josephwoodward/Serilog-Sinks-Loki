@@ -1,7 +1,4 @@
-using System.Linq;
-using Newtonsoft.Json;
 using Serilog.Sinks.Loki.Tests.Infrastructure;
-using Shouldly;
 using Xunit;
 
 namespace Serilog.Sinks.Loki.Tests.Labels

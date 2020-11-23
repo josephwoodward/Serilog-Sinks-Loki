@@ -1,5 +1,3 @@
-using System;
-
 namespace Serilog.Sinks.Loki.ExampleWebApp.Models
 {
     public class ErrorViewModel
