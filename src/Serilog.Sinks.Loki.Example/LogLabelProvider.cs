@@ -16,6 +16,7 @@ namespace Serilog.Sinks.Loki.Example
 
         public IList<string> PropertiesAsLabels { get; set; } = new List<string>
         {
+            "level", // Since 3.0.0, you need to explicitly add level if you want it!
             "MyLabelPropertyName"
         };
         public IList<string> PropertiesToAppend { get; set; } = new List<string>

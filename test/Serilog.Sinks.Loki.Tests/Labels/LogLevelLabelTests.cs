@@ -1,5 +1,6 @@
 using System.Linq;
 using Newtonsoft.Json;
+using Serilog.Sinks.Loki.Labels;
 using Serilog.Sinks.Loki.Tests.Infrastructure;
 using Shouldly;
 using Xunit;
@@ -15,6 +16,25 @@ namespace Serilog.Sinks.Loki.Tests.Labels
         {
             _client = new TestHttpClient();
             _credentials = new BasicAuthCredentials("http://test:80", "Walter", "White");
+        }
+        
+        [Fact]
+        public void NoLabelIsSet()
+        {
+            // Arrange
+            var provider = new DefaultLogLabelProvider(new LokiLabel[0], new string[0]); // Explicitly NOT include level
+            var log = new LoggerConfiguration()
+                .MinimumLevel.Verbose()
+                .WriteTo.LokiHttp(_credentials, provider, _client)
+                .CreateLogger();
+            
+            // Act
+            log.Fatal("Fatal Level");
+            log.Dispose();
+            
+            // Assert
+            var response = JsonConvert.DeserializeObject<TestResponse>(_client.Content);
+            response.Streams.First().Labels.ShouldBe("{}");
         }
         
         [Fact]

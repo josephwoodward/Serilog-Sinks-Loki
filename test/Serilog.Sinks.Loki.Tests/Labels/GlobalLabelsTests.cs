@@ -1,5 +1,6 @@
 using System.Linq;
 using Newtonsoft.Json;
+using Serilog.Sinks.Loki.Labels;
 using Serilog.Sinks.Loki.Tests.Infrastructure;
 using Shouldly;
 using Xunit;
@@ -23,9 +24,10 @@ namespace Serilog.Sinks.Loki.Tests.Labels
         public void GlobalLabelsCanBeSet()
         {
             // Arrange
+            var provider = new DefaultLogLabelProvider(new[] {new LokiLabel("app", "tests")});
             var log = new LoggerConfiguration()
                 .MinimumLevel.Information()
-                .WriteTo.LokiHttp(_credentials, new TestLabelProvider(), _client)
+                .WriteTo.LokiHttp(_credentials, provider, _client)
                 .CreateLogger();
             
             // Act
@@ -34,7 +36,7 @@ namespace Serilog.Sinks.Loki.Tests.Labels
             
             // Assert
             var response = JsonConvert.DeserializeObject<TestResponse>(_client.Content);
-            response.Streams.First().Labels.ShouldBe("{level=\"error\",app=\"tests\"}");
+            response.Streams.First().Labels.ShouldBe("{app=\"tests\",level=\"error\"}");
         }
     }
 }
