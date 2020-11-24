@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Serilog.Sinks.Loki.Labels
 {
-    class DefaultLogLabelProvider : ILogLabelProvider
+    public class DefaultLogLabelProvider : ILogLabelProvider
     {
         public DefaultLogLabelProvider() : this(null)
         {
@@ -15,7 +15,7 @@ namespace Serilog.Sinks.Loki.Labels
             LokiFormatterStrategy formatterStrategy = LokiFormatterStrategy.SpecificPropertiesAsLabelsAndRestAppended)
         {
             this.Labels = labels?.ToList() ?? new List<LokiLabel>();
-            this.PropertiesAsLabels = propertiesAsLabels?.ToList() ?? new List<string>();
+            this.PropertiesAsLabels = propertiesAsLabels?.ToList() ?? new List<string> {"level"};
             this.PropertiesToAppend = propertiesToAppend?.ToList() ?? new List<string>();
             this.FormatterStrategy = formatterStrategy;
         }
