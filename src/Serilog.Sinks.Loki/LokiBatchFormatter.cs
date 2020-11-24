@@ -32,26 +32,6 @@ namespace Serilog.Sinks.Loki
             this.LogLabelProvider = new DefaultLogLabelProvider(globalLabels);
         }
 
-        // This avoids additional quoting as described in https://github.com/serilog/serilog/issues/936
-        private static void RenderMessage(TextWriter tw, LogEvent logEvent)
-        {
-            bool IsString(LogEventPropertyValue pv)
-            {
-                return pv is ScalarValue sv && sv.Value is string;
-            }
-
-            foreach(var t in logEvent.MessageTemplate.Tokens)
-            {
-                if (t is PropertyToken pt &&
-                    logEvent.Properties.TryGetValue(pt.PropertyName, out var propVal) &&
-                    IsString(propVal))
-                    tw.Write(((ScalarValue)propVal).Value);
-                else
-                    t.Render(logEvent.Properties, tw);
-            }
-            tw.Write('\n');
-        }
-
         public void Format(IEnumerable<LogEvent> logEvents, ITextFormatter formatter, TextWriter output)
         {
             if (logEvents == null)
@@ -75,11 +55,8 @@ namespace Serilog.Sinks.Loki
                 var sb = new StringBuilder();
                 using (var tw = new StringWriter(sb))
                 {
-                    RenderMessage(tw, logEvent);
+                    formatter.Format(logEvent, tw);
                 }
-                if (logEvent.Exception != null)
-                    // AggregateException adds a Environment.Newline to the end of ToString(), so we trim it off
-                    sb.AppendLine(logEvent.Exception.ToString().TrimEnd());
 
                 HandleProperty("level", GetLevel(logEvent.Level), labels, sb);
                 foreach (KeyValuePair<string, LogEventPropertyValue> property in logEvent.Properties)
