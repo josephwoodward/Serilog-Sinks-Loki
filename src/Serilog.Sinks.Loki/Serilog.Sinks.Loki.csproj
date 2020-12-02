@@ -6,7 +6,7 @@
         <PackageId>Serilog.Sinks.Loki</PackageId>
         <PackageTags>loki,serilog,sinks</PackageTags>
         <title>Serilog.Sinks.Loki</title>
-        <PackageReleaseNotes>https://github.com/JosephWoodward/Serilog-Sinks-Loki/releases/tag/v3.0.0</PackageReleaseNotes>
+        <PackageReleaseNotes>https://github.com/JosephWoodward/Serilog-Sinks-Loki/releases/tag/$(Version)-beta1</PackageReleaseNotes>
         <Authors>Joseph Woodward</Authors>
         <Description>A Serilog Sink for Grafana's Loki log aggregator</Description>
         <PackageProjectUrl>https://github.com/JosephWoodward/Serilog-Sinks-Loki</PackageProjectUrl>
@@ -14,8 +14,8 @@
         <PackageIcon>logo_128_128.png</PackageIcon>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
-        <MinVerVerbosity>diag</MinVerVerbosity>
-        <MinVerTagPrefix>v</MinVerTagPrefix>
+        <GeneratePackageOnBuild Condition="$(Configuration) == 'Release'">true</GeneratePackageOnBuild>
+        <PackageOutputPath>..\..\nuget</PackageOutputPath>
         <OutputType>Library</OutputType>
         <MinVerSkip Condition="'$(Configuration)' == 'Debug'">true</MinVerSkip>
     </PropertyGroup>
@@ -26,9 +26,6 @@
         <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
         <PackageReference Include="Serilog" Version="2.9.0" />
         <PackageReference Include="Serilog.Sinks.Http" Version="5.2.1" />
-        <PackageReference Include="MinVer" Version="2.1.0">
-            <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
         <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
