@@ -15,5 +15,11 @@ namespace Serilog.Sinks.Loki.Tests.Infrastructure
     public class Stream
     {
         public string Labels { get; set; }
+        public List<Entry> Entries { get; set; }
+    }
+
+    public class Entry
+    {
+        public string Line { get; set; }
     }
 }

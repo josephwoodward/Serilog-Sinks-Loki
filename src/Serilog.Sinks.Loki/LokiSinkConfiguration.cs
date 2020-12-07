@@ -6,7 +6,7 @@ namespace Serilog.Sinks.Loki
 {
     public class LokiSinkConfiguration
     {
-        internal const string DefaultTemplate = "{Message}{NewLine}{Exception}";
+        internal const string DefaultTemplate = "{Message:lj}{NewLine}{Exception}";
 
         public string LokiUrl { get; set; }
         public string LokiUsername { get; set; }
