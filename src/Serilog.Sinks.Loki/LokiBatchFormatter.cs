@@ -95,13 +95,12 @@ namespace Serilog.Sinks.Loki
             // To avoid this, remove all quotes from the value.
             // We also remove any \r\n newlines and replace with \n new lines to prevent "bad request" responses
             // We also remove backslashes and replace with forward slashes, Loki doesn't like those either
-            value = value.Replace("\r\n", "\n");
+            value = value.Replace("\r\n", "\n").Replace("\"", "").Replace("\\", "/");
 
             switch (DetermineHandleActionForProperty(name))
             {
                 case HandleAction.Discard: return;
                 case HandleAction.SendAsLabel:
-                    value = value.Replace("\"", "").Replace("\\", "/");
                     labels.Add(new LokiLabel(name, value));
                     break;
                 case HandleAction.AppendToMessage:
