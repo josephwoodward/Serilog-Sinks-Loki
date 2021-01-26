@@ -42,7 +42,7 @@ namespace Serilog.Sinks.Loki
             if (output == null)
                 throw new ArgumentNullException(nameof(output));
 
-            List<LogEvent> logs = logEvents.ToList();
+            List<LogEvent> logs = logEvents.OrderBy(le => le.Timestamp).ToList();
             if (!logs.Any())
                 return;
 
