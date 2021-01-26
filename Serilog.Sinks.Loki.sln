@@ -1,12 +1,20 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serilog.Sinks.Loki", "src\Serilog.Sinks.Loki\Serilog.Sinks.Loki.csproj", "{CA843AAB-AEC9-48CA-9505-3872B2FD1B62}"
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30709.132
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serilog.Sinks.Loki", "src\Serilog.Sinks.Loki\Serilog.Sinks.Loki.csproj", "{CA843AAB-AEC9-48CA-9505-3872B2FD1B62}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serilog.Sinks.Loki.Tests", "test\Serilog.Sinks.Loki.Tests\Serilog.Sinks.Loki.Tests.csproj", "{D1296C65-14C2-4F0B-8002-94DE80E27BA9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serilog.Sinks.Loki.Tests", "test\Serilog.Sinks.Loki.Tests\Serilog.Sinks.Loki.Tests.csproj", "{D1296C65-14C2-4F0B-8002-94DE80E27BA9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serilog.Sinks.Loki.Example", "src\Serilog.Sinks.Loki.Example\Serilog.Sinks.Loki.Example.csproj", "{27231F46-85E6-4046-9C1E-4D8BB77A9E0D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serilog.Sinks.Loki.Example", "src\Serilog.Sinks.Loki.Example\Serilog.Sinks.Loki.Example.csproj", "{27231F46-85E6-4046-9C1E-4D8BB77A9E0D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serilog.Sinks.Loki.ExampleWebApp", "src\Serilog.Sinks.Loki.ExampleWebApp\Serilog.Sinks.Loki.ExampleWebApp.csproj", "{4ED0FE2E-63DC-45ED-822B-849724790462}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serilog.Sinks.Loki.ExampleWebApp", "src\Serilog.Sinks.Loki.ExampleWebApp\Serilog.Sinks.Loki.ExampleWebApp.csproj", "{4ED0FE2E-63DC-45ED-822B-849724790462}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3DB70754-12DD-4090-8DC9-A8E801D9B5A7}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,5 +38,11 @@ Global
 		{4ED0FE2E-63DC-45ED-822B-849724790462}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4ED0FE2E-63DC-45ED-822B-849724790462}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4ED0FE2E-63DC-45ED-822B-849724790462}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FAA4E3CA-9A05-45D6-B1C4-17817BFA93D6}
 	EndGlobalSection
 EndGlobal

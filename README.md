@@ -124,5 +124,29 @@ var log = new LoggerConfiguration()
         .CreateLogger();
 ```
 
+### Configure using appsettings.json
+`Serilog-Sinks-Loki` can be configured with `appsettings.json` using `Serilog.Settings.Configuration`.  
+It support the following arguments `serverUrl`, `username`, `password`, `credentials`, `labelProvider`, `httpClient`, `outputTemplate` and `formatProvider`.  
+Not all fields can be used in combination look in [LokiSinkExtensions.cs](src/Serilog.Sinks.Loki/LokiSinkExtensions.cs) for the supported combinations.  
+`credentials`, `labelProvider`, `httpClient`, and `formatProvider` are classes and must be specified using the `Namespace.ClassName, Assembly` syntax.
+```json
+"Serilog": {
+  "Using": [ "Serilog.Sinks.Loki" ],
+  "MinimumLevel": {
+    "Default": "Verbose"
+  },
+  "Enrich": [ "FromLogContext" ],
+  "WriteTo": [      
+    {
+      "Name": "LokiHttp",
+      "Args": {
+        "serverUrl": "https://loki:3000",
+        "labelProvider": "Namespace.ClassName, Assembly"
+      }
+    }
+  ]
+}
+```
+
 ### Missing a feature or want to contribute?
 This package is still in its infancy so if there's anything missing then please feel free to raise a feature request, either that or pull requests are most welcome!
