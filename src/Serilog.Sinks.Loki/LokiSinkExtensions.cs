@@ -1,5 +1,6 @@
 using System;
 using Serilog.Configuration;
+using Serilog.Formatting;
 using Serilog.Formatting.Display;
 using Serilog.Sinks.Http;
 using Serilog.Sinks.Loki.Labels;
@@ -18,7 +19,7 @@ namespace Serilog.Sinks.Loki
                 : new BasicAuthCredentials(lokiConfig.LokiUrl, lokiConfig.LokiUsername, lokiConfig.LokiPassword);
 
             return LokiHttpImpl(serilogConfig, credentials, lokiConfig.LogLabelProvider, lokiConfig.HttpClient,
-                lokiConfig.OutputTemplate, lokiConfig.FormatProvider, lokiConfig.BatchPostingLimit,
+                lokiConfig.OutputTemplate, lokiConfig.FormatProvider, lokiConfig.TextFormatter, lokiConfig.BatchPostingLimit,
                 lokiConfig.QueueLimit, lokiConfig.Period);
         }
 
@@ -29,6 +30,7 @@ namespace Serilog.Sinks.Loki
             IHttpClient httpClient,
             string outputTemplate,
             IFormatProvider formatProvider,
+            ITextFormatter textFormatter,
             int batchPostingLimit,
             int? queueLimit,
             TimeSpan? period)
@@ -42,8 +44,8 @@ namespace Serilog.Sinks.Loki
 
             return sinkConfiguration.Http(LokiRouteBuilder.BuildPostUri(credentials.Url),
                 batchFormatter: formatter,
-                textFormatter: new MessageTemplateTextFormatter(outputTemplate, formatProvider),
                 httpClient: client,
+                textFormatter: textFormatter ?? new MessageTemplateTextFormatter(outputTemplate, formatProvider),
                 batchPostingLimit: batchPostingLimit,
                 queueLimit: queueLimit,
                 period: period);
