@@ -14,6 +14,12 @@ namespace Serilog.Sinks.Loki
         public static LoggerConfiguration LokiHttp(this LoggerSinkConfiguration sinkConfiguration, string serverUrl, string username, string password)
             => sinkConfiguration.LokiHttp(new BasicAuthCredentials(serverUrl, username, password));
 
+        public static LoggerConfiguration LokiHttp(this LoggerSinkConfiguration sinkConfiguration, string serverUrl, string username, string password, ILogLabelProvider labelProvider = null, LokiHttpClient httpClient = null, string outputTemplate = LokiSinkConfiguration.DefaultTemplate, IFormatProvider formatProvider = null)
+            => LokiHttpImpl(sinkConfiguration, new BasicAuthCredentials(serverUrl, username, password), labelProvider, httpClient, outputTemplate, formatProvider);
+
+        public static LoggerConfiguration LokiHttp(this LoggerSinkConfiguration sinkConfiguration, string serverUrl, ILogLabelProvider labelProvider = null, LokiHttpClient httpClient = null, string outputTemplate = LokiSinkConfiguration.DefaultTemplate, IFormatProvider formatProvider = null)
+            => LokiHttpImpl(sinkConfiguration, new NoAuthCredentials(serverUrl), labelProvider, httpClient, outputTemplate, formatProvider);
+
         public static LoggerConfiguration LokiHttp(this LoggerSinkConfiguration sinkConfiguration, LokiCredentials credentials, ILogLabelProvider labelProvider = null, LokiHttpClient httpClient = null, string outputTemplate = LokiSinkConfiguration.DefaultTemplate, IFormatProvider formatProvider = null)
             => LokiHttpImpl(sinkConfiguration, credentials, labelProvider, httpClient, outputTemplate, formatProvider);
 
