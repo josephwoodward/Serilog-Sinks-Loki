@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Serilog.Sinks.Http;
 
 namespace Serilog.Sinks.Loki
@@ -27,6 +28,10 @@ namespace Serilog.Sinks.Loki
 
             var token = Base64Encode($"{c.Username}:{c.Password}");
             headers.Add("Authorization", $"Basic {token}");
+        }
+
+        public void Configure(IConfiguration configuration)
+        {
         }
 
         public virtual Task<HttpResponseMessage> PostAsync(string requestUri, HttpContent content)
