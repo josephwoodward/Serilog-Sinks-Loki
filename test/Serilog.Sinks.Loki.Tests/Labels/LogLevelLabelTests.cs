@@ -10,12 +10,10 @@ namespace Serilog.Sinks.Loki.Tests.Labels
     public class LogLevelTests
     {
         private readonly TestHttpClient _client;
-        private readonly BasicAuthCredentials _credentials;
 
         public LogLevelTests()
         {
             _client = new TestHttpClient();
-            _credentials = new BasicAuthCredentials("http://test:80", "Walter", "White");
         }
         
         [Fact]
@@ -25,7 +23,12 @@ namespace Serilog.Sinks.Loki.Tests.Labels
             var provider = new DefaultLogLabelProvider(new LokiLabel[0], new string[0]); // Explicitly NOT include level
             var log = new LoggerConfiguration()
                 .MinimumLevel.Verbose()
-                .WriteTo.LokiHttp(_credentials, provider, _client)
+                .WriteTo.LokiHttp(() => new LokiSinkConfiguration
+                {
+                    LokiUrl = "http://test:80",
+                    LogLabelProvider = provider,
+                    HttpClient = _client
+                })
                 .CreateLogger();
             
             // Act
@@ -43,7 +46,11 @@ namespace Serilog.Sinks.Loki.Tests.Labels
             // Arrange
             var log = new LoggerConfiguration()
                 .MinimumLevel.Verbose()
-                .WriteTo.LokiHttp(_credentials, httpClient: _client)
+                .WriteTo.LokiHttp(() => new LokiSinkConfiguration
+                {
+                    LokiUrl = "http://test:80",
+                    HttpClient = _client
+                })
                 .CreateLogger();
             
             // Act
@@ -61,7 +68,11 @@ namespace Serilog.Sinks.Loki.Tests.Labels
             // Arrange
             var log = new LoggerConfiguration()
                 .MinimumLevel.Debug()
-                .WriteTo.LokiHttp(_credentials, httpClient: _client)
+                .WriteTo.LokiHttp(() => new LokiSinkConfiguration
+                {
+                    LokiUrl = "http://test:80",
+                    HttpClient = _client
+                })
                 .CreateLogger();
             
             // Act
@@ -79,7 +90,11 @@ namespace Serilog.Sinks.Loki.Tests.Labels
             // Arrange
             var log = new LoggerConfiguration()
                 .MinimumLevel.Information()
-                .WriteTo.LokiHttp(_credentials, httpClient: _client)
+                .WriteTo.LokiHttp(() => new LokiSinkConfiguration
+                {
+                    LokiUrl = "http://test:80",
+                    HttpClient = _client
+                })
                 .CreateLogger();
             
             // Act
@@ -97,7 +112,11 @@ namespace Serilog.Sinks.Loki.Tests.Labels
             // Arrange
             var log = new LoggerConfiguration()
                 .MinimumLevel.Error()
-                .WriteTo.LokiHttp(_credentials, httpClient: _client)
+                .WriteTo.LokiHttp(() => new LokiSinkConfiguration
+                {
+                    LokiUrl = "http://test:80",
+                    HttpClient = _client
+                })
                 .CreateLogger();
             
             // Act
@@ -115,7 +134,11 @@ namespace Serilog.Sinks.Loki.Tests.Labels
             // Arrange
             var log = new LoggerConfiguration()
                 .MinimumLevel.Fatal()
-                .WriteTo.LokiHttp(_credentials, httpClient: _client)
+                .WriteTo.LokiHttp(() => new LokiSinkConfiguration
+                {
+                    LokiUrl = "http://test:80",
+                    HttpClient = _client
+                })
                 .CreateLogger();
             
             // Act

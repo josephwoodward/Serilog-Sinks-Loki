@@ -9,14 +9,15 @@ namespace Serilog.Sinks.Loki.ExampleWebApp
     {
         public static int Main(string[] args)
         {
-            var credentials = new NoAuthCredentials("http://localhost:3100");
-            
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
                 .Enrich.FromLogContext()
                 .WriteTo.Console()
-                .WriteTo.LokiHttp(credentials)
+                .WriteTo.LokiHttp(() => new LokiSinkConfiguration
+                {
+                    LokiUrl = "http://localhost:3100"
+                })
                 .CreateLogger();
 
             try
