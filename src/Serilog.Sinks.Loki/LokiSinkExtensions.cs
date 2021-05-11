@@ -8,21 +8,6 @@ namespace Serilog.Sinks.Loki
 {
     public static class LokiSinkExtensions
     {
-        public static LoggerConfiguration LokiHttp(this LoggerSinkConfiguration sinkConfiguration, string serverUrl)
-            => sinkConfiguration.LokiHttp(new NoAuthCredentials(serverUrl));
-
-        public static LoggerConfiguration LokiHttp(this LoggerSinkConfiguration sinkConfiguration, string serverUrl, string username, string password)
-            => sinkConfiguration.LokiHttp(new BasicAuthCredentials(serverUrl, username, password));
-
-        public static LoggerConfiguration LokiHttp(this LoggerSinkConfiguration sinkConfiguration, string serverUrl, string username, string password, ILogLabelProvider labelProvider = null, LokiHttpClient httpClient = null, string outputTemplate = LokiSinkConfiguration.DefaultTemplate, IFormatProvider formatProvider = null)
-            => LokiHttpImpl(sinkConfiguration, new BasicAuthCredentials(serverUrl, username, password), labelProvider, httpClient, outputTemplate, formatProvider);
-
-        public static LoggerConfiguration LokiHttp(this LoggerSinkConfiguration sinkConfiguration, string serverUrl, ILogLabelProvider labelProvider = null, LokiHttpClient httpClient = null, string outputTemplate = LokiSinkConfiguration.DefaultTemplate, IFormatProvider formatProvider = null)
-            => LokiHttpImpl(sinkConfiguration, new NoAuthCredentials(serverUrl), labelProvider, httpClient, outputTemplate, formatProvider);
-
-        public static LoggerConfiguration LokiHttp(this LoggerSinkConfiguration sinkConfiguration, LokiCredentials credentials, ILogLabelProvider labelProvider = null, LokiHttpClient httpClient = null, string outputTemplate = LokiSinkConfiguration.DefaultTemplate, IFormatProvider formatProvider = null)
-            => LokiHttpImpl(sinkConfiguration, credentials, labelProvider, httpClient, outputTemplate, formatProvider);
-
         public static LoggerConfiguration LokiHttp(this LoggerSinkConfiguration sinkConfiguration, Func<LokiSinkConfiguration> configFactory)
             => LokiHttpImpl(sinkConfiguration, configFactory());
 
@@ -32,7 +17,9 @@ namespace Serilog.Sinks.Loki
                 ? (LokiCredentials)new NoAuthCredentials(lokiConfig.LokiUrl)
                 : new BasicAuthCredentials(lokiConfig.LokiUrl, lokiConfig.LokiUsername, lokiConfig.LokiPassword);
 
-            return LokiHttpImpl(serilogConfig, credentials, lokiConfig.LogLabelProvider, lokiConfig.HttpClient, lokiConfig.OutputTemplate, lokiConfig.FormatProvider);
+            return LokiHttpImpl(serilogConfig, credentials, lokiConfig.LogLabelProvider, lokiConfig.HttpClient,
+                lokiConfig.OutputTemplate, lokiConfig.FormatProvider, lokiConfig.BatchPostingLimit,
+                lokiConfig.QueueLimit, lokiConfig.Period);
         }
 
         private static LoggerConfiguration LokiHttpImpl(
@@ -41,7 +28,10 @@ namespace Serilog.Sinks.Loki
             ILogLabelProvider logLabelProvider,
             IHttpClient httpClient,
             string outputTemplate,
-            IFormatProvider formatProvider)
+            IFormatProvider formatProvider,
+            int batchPostingLimit,
+            int? queueLimit,
+            TimeSpan? period)
         {
             var formatter = new LokiBatchFormatter(logLabelProvider ?? new DefaultLogLabelProvider());
             var client = httpClient ?? new DefaultLokiHttpClient();
@@ -53,7 +43,10 @@ namespace Serilog.Sinks.Loki
             return sinkConfiguration.Http(LokiRouteBuilder.BuildPostUri(credentials.Url),
                 batchFormatter: formatter,
                 textFormatter: new MessageTemplateTextFormatter(outputTemplate, formatProvider),
-                httpClient: client);
+                httpClient: client,
+                batchPostingLimit: batchPostingLimit,
+                queueLimit: queueLimit,
+                period: period);
         }
     }
 }
