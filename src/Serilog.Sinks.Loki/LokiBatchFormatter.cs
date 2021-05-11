@@ -121,10 +121,17 @@ namespace Serilog.Sinks.Loki
 
         private static string SimplifyValue(string value)
         {
-            var match = ValueWithoutSpaces.Match(value);
-            return match.Success
-                ? Regex.Unescape(match.Groups[1].Value)
-                : value;
+            try
+            {
+                var match = ValueWithoutSpaces.Match(value);
+                return match.Success
+                    ? Regex.Unescape(match.Groups[1].Value)
+                    : value;
+            }
+            catch
+            {
+                return value;
+            }
         }
 
         private static string GetLevel(LogEventLevel level)
