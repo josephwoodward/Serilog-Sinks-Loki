@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Serilog.Events;
 using Serilog.Formatting;
-using Serilog.Parsing;
 using Serilog.Sinks.Http;
 using Serilog.Sinks.Loki.Labels;
 
@@ -13,7 +12,7 @@ namespace Serilog.Sinks.Loki
 {
     using System.Text;
 
-    internal class LokiBatchFormatter : IBatchFormatter
+    public class LokiBatchFormatter : IBatchFormatter
     {
         private static readonly Regex ValueWithoutSpaces = new Regex("^\"(\\S+)\"$", RegexOptions.Compiled);
 
