@@ -21,7 +21,11 @@ namespace Serilog.Sinks.Loki.Tests.HttpClientTests
             var credentials = new NoAuthCredentials("http://test:80");
             var log = new LoggerConfiguration()
                 .MinimumLevel.Information()
-                .WriteTo.LokiHttp(credentials, httpClient: _client)
+                .WriteTo.LokiHttp(() => new LokiSinkConfiguration
+                {
+                    LokiUrl = "http://test:80",
+                    HttpClient = _client
+                })
                 .CreateLogger();
 
             // Act

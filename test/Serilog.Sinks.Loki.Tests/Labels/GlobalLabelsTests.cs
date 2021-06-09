@@ -11,13 +11,11 @@ namespace Serilog.Sinks.Loki.Tests.Labels
     {
         private readonly HttpClientTestFixture _httpClientTestFixture;
         private readonly TestHttpClient _client;
-        private readonly BasicAuthCredentials _credentials;
 
         public GlobalLabelsTests(HttpClientTestFixture httpClientTestFixture)
         {
             _httpClientTestFixture = httpClientTestFixture;
             _client = new TestHttpClient();
-            _credentials = new BasicAuthCredentials("http://test:80", "Walter", "White");
         }
         
         [Fact]
@@ -27,7 +25,14 @@ namespace Serilog.Sinks.Loki.Tests.Labels
             var provider = new DefaultLogLabelProvider(new[] {new LokiLabel("app", "tests")});
             var log = new LoggerConfiguration()
                 .MinimumLevel.Information()
-                .WriteTo.LokiHttp(_credentials, provider, _client)
+                .WriteTo.LokiHttp(() => new LokiSinkConfiguration
+                {
+                    LokiUrl = "http://test:80",
+                    LokiUsername = "Walter",
+                    LokiPassword = "White",
+                    LogLabelProvider = provider,
+                    HttpClient = _client
+                })
                 .CreateLogger();
             
             // Act

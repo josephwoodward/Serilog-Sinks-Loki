@@ -19,10 +19,13 @@ namespace Serilog.Sinks.Loki.Tests.HttpClientTests
         public void RequestUriIsCorrect(string address)
         {
             // Arrange
-            var credentials = new NoAuthCredentials(address);
             var log = new LoggerConfiguration()
                 .MinimumLevel.Information()
-                .WriteTo.LokiHttp(credentials, httpClient: _client)
+                .WriteTo.LokiHttp(() => new LokiSinkConfiguration
+                {
+                    LokiUrl = address,
+                    HttpClient = _client
+                })
                 .CreateLogger();
             
             // Act
@@ -30,7 +33,7 @@ namespace Serilog.Sinks.Loki.Tests.HttpClientTests
             log.Dispose();
 
             // Assert
-            _client.RequestUri.ShouldBe(LokiRouteBuilder.BuildPostUri(credentials.Url));
+            _client.RequestUri.ShouldBe(LokiRouteBuilder.BuildPostUri(address));
         }
     }
 }

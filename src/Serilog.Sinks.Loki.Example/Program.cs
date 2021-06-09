@@ -9,16 +9,19 @@ namespace Serilog.Sinks.Loki.Example
     {
         static void Main(string[] args)
         {
-            NoAuthCredentials credentials = new NoAuthCredentials("http://localhost:3100");
             Logger log = new LoggerConfiguration()
                         .MinimumLevel.Verbose()
                         .Enrich.FromLogContext()
                         .Enrich.WithProperty("MyLabelPropertyName","MyPropertyValue")
                         .Enrich.WithThreadId()
                         .WriteTo.Console()
-                        .WriteTo.LokiHttp(credentials, new LogLabelProvider(), new LokiExampleHttpClient())
+                        .WriteTo.LokiHttp(() => new LokiSinkConfiguration {
+                            LokiUrl = "http://localhost:3100",
+                            LogLabelProvider = new LogLabelProvider(),
+                            HttpClient = new LokiExampleHttpClient()
+                        })
                         .CreateLogger();
-            
+
             log.Verbose("Verbose Text");
 
             int total = 3;

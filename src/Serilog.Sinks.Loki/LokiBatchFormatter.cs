@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Serilog.Events;
 using Serilog.Formatting;
-using Serilog.Parsing;
 using Serilog.Sinks.Http;
 using Serilog.Sinks.Loki.Labels;
 
@@ -13,7 +12,7 @@ namespace Serilog.Sinks.Loki
 {
     using System.Text;
 
-    internal class LokiBatchFormatter : IBatchFormatter
+    public class LokiBatchFormatter : IBatchFormatter
     {
         private static readonly Regex ValueWithoutSpaces = new Regex("^\"(\\S+)\"$", RegexOptions.Compiled);
 
@@ -121,10 +120,17 @@ namespace Serilog.Sinks.Loki
 
         private static string SimplifyValue(string value)
         {
-            var match = ValueWithoutSpaces.Match(value);
-            return match.Success
-                ? Regex.Unescape(match.Groups[1].Value)
-                : value;
+            try
+            {
+                var match = ValueWithoutSpaces.Match(value);
+                return match.Success
+                    ? Regex.Unescape(match.Groups[1].Value)
+                    : value;
+            }
+            catch
+            {
+                return value;
+            }
         }
 
         private static string GetLevel(LogEventLevel level)
