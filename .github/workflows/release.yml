@@ -1,0 +1,28 @@
+name: release-pipeline
+
+on:
+  release:
+    types:
+      - created
+
+
+jobs:
+  release-nuget:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+    - name: Install dependencies
+      run: dotnet restore
+    - name: Run tests
+      run: dotnet test
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+    - name: Publish
+      uses: brandedoutcast/publish-nuget@v2
+      with:
+          PROJECT_FILE_PATH: src/Serilog.Sinks.Loki/Serilog.Sinks.Loki.csproj
+          NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+          NUGET_SOURCE: https://api.nuget.org
+          INCLUDE_SYMBOLS: true
