@@ -26,4 +26,3 @@ jobs:
           NUGET_KEY: ${{secrets.NUGET_API_KEY}}
           NUGET_SOURCE: https://api.nuget.org
           INCLUDE_SYMBOLS: true
-          TAG_FORMAT: *
