@@ -1,4 +1,6 @@
-﻿namespace Serilog.Sinks.Loki
+using System.Net.Http;
+
+namespace Serilog.Sinks.Loki
 {
   public class DefaultLokiHttpClient : LokiHttpClient
   {
