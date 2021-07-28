@@ -2,5 +2,6 @@
 {
   public class DefaultLokiHttpClient : LokiHttpClient
   {
+    public DefaultLokiHttpClient(HttpClient httpClient = null) : base(httpClient) {}
   }
 }
