@@ -1,4 +1,5 @@
 using System;
+using Serilog.Formatting;
 using Serilog.Sinks.Http;
 using Serilog.Sinks.Loki.Labels;
 
@@ -18,5 +19,6 @@ namespace Serilog.Sinks.Loki
         public int BatchPostingLimit { get; set; } = 1000;
         public int? QueueLimit { get; set; }
         public TimeSpan? Period { get; set; }
+        public ITextFormatter TextFormatter { get; set; }
     }
 }
